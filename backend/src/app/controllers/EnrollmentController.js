@@ -53,7 +53,7 @@ class EnrollmentController {
       limit: 20,
       offset: (page - 1) * 20,
       order: ['start_date'],
-      attributes: ['start_date', 'end_date', 'price'],
+      attributes: ['id', 'start_date', 'end_date', 'price', 'active'],
       include: [
         {
           model: Student,

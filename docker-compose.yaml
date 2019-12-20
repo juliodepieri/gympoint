@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  postgres:
+    container_name: 'gympoint-postgres'
+    restart: always
+    image: postgres:alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: gympoint
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: docker
+
+  redis:
+    container_name: 'gympoint-redis'
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+  
+  mongo:
+    container_name: 'gympoint-mongo'
+    image: mongo
+    ports:
+      - "27017:27017"
