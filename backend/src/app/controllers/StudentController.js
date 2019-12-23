@@ -1,7 +1,30 @@
 import * as Yup from 'yup';
+import Sequelize, { Op } from 'sequelize';
 import Student from '../models/Student';
 
 class StudentController {
+  async index(req, res) {
+    const { name, page = 1 } = req.query;
+    const query = {
+      limit: 20,
+      offset: (page - 1) * 20,
+      order: ['name'],
+      attributes: ['id', 'name', 'email', 'dateOfBirth', 'weight', 'height'],
+    };
+
+    if (name) {
+      query.where = {
+        name: {
+          [Op.iLike]: `%${name}%`,
+        },
+      };
+    }
+
+    const students = await Student.findAll(query);
+
+    return res.json(students);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
@@ -51,7 +74,7 @@ class StudentController {
 
     const { email } = req.body;
 
-    const student = await Student.findByPk(req.userId);
+    const student = await Student.findByPk(req.params.id);
 
     if (email !== student.email) {
       const studentExists = await Student.findOne({ where: { email } });
@@ -73,6 +96,13 @@ class StudentController {
       weight,
       height,
     });
+  }
+
+  async delete(req, res) {
+    await Student.destroy({
+      where: { id: req.params.id },
+    });
+    return res.status(204).json();
   }
 }
 
