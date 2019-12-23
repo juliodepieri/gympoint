@@ -15,6 +15,7 @@ export default function auth(state = INITIAL_STATE, action) {
       }
       case '@auth/SIGN_IN_SUCCESS': {
         draft.token = action.payload.token;
+        draft.user = action.payload.user;
         draft.signed = true;
         draft.loading = false;
         break;
@@ -26,6 +27,7 @@ export default function auth(state = INITIAL_STATE, action) {
       case '@auth/SIGN_OUT': {
         draft.token = null;
         draft.signed = false;
+        draft.user = null;
         break;
       }
       default:

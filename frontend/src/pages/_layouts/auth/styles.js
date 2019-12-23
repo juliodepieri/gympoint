@@ -19,9 +19,7 @@ export const Content = styled.div`
     flex-direction: column;
     margin-top: 30px;
     padding: 30px;
-
     width: 360px;
-    height: 448px;
     background: #fff;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     border-radius: 4px;
@@ -34,7 +32,7 @@ export const Content = styled.div`
       color: #444444;
       font-weight: bold;
       text-align: left;
-      margin-bottom: 5px;
+      margin: 25px 0 5px 0;
     }
 
     input {
@@ -46,22 +44,14 @@ export const Content = styled.div`
       border: 1px solid #dddddd;
       box-sizing: border-box;
       border-radius: 4px;
-      margin: 0 0 25px;
 
       &::placeholder {
         color: rgba(0, 0, 0, 0.4);
       }
     }
 
-    span {
-      color: #fb6f91;
-      align-self: flex-start;
-      margin: 0 0 10px;
-      font-weight: bold;
-    }
-
     button {
-      margin: 5px 0 0;
+      margin: 25px 0 0;
       height: 44px;
       background: #ee4d64;
       font-weight: bold;

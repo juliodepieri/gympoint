@@ -1,39 +1,50 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import Notifications from '~/components/Notifications';
-
 import logo from '~/assets/logo-header.svg';
+
+import { signOut } from '~/store/modules/auth/actions';
 
 import { Container, Content, Profile } from './styles';
 
 export default function Header() {
-  const profile = useSelector(state => state.user.profile);
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.auth.user);
+
+  function handleSignOut() {
+    dispatch(signOut());
+  }
 
   return (
     <Container>
       <Content>
         <nav>
-          <img src={logo} alt="GoBarber" />
-          <Link to="/dashboard">DASHBOARD</Link>
+          <img src={logo} alt="Gympoint" />
+          <ul>
+            <li>
+              <Link to="/students">ALUNOS</Link>
+            </li>
+            <li>
+              <Link to="/students">PLANOS</Link>
+            </li>
+            <li>
+              <Link to="/students">MATRÍCULAS</Link>
+            </li>
+            <li>
+              <Link to="/students">PEDIDOS DE AUXÍLIO</Link>
+            </li>
+          </ul>
         </nav>
 
         <aside>
-          <Notifications />
-
           <Profile>
             <div>
-              <strong>{profile.name}</strong>
-              <Link to="/profile">Meu perfil</Link>
+              <strong>{user.name}</strong>
+              <button type="button" onClick={handleSignOut}>
+                Sair do sistema
+              </button>
             </div>
-            <img
-              src={
-                profile.avatar.url ||
-                'https://api.adorable.io/avatars/50/abott@adorable.png'
-              }
-              alt={profile.name}
-            />
           </Profile>
         </aside>
       </Content>

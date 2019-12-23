@@ -24,8 +24,6 @@ export default function SignIn() {
 
   return (
     <>
-      <img src={logo} alt="GoBarber" />
-
       <Form schema={schema} onSubmit={handleSubmit}>
         <img src={logo} alt="Gympoint" />
 

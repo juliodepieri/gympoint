@@ -44,4 +44,12 @@ export default createGlobalStyle`
   button {
     cursor: pointer;
   }
+
+  input + span {
+    display: flex;
+    color: #eb4949;
+    margin: 0 0 10px;
+    font-weight: bold;
+    margin-top: 5px;
+  }
 `;
