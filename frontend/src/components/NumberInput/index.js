@@ -10,7 +10,7 @@ export default function CurrencyInput({ name, label, autocomplete }) {
   const ref = useRef(null);
   const { fieldName, registerField, defaultValue, error } = useField(name);
   const [formattedValue, setFormattedValue] = useState(defaultValue);
-  const [numberValue, setDecimalValue] = useState(defaultValue);
+  const [numberValue, setNumberValue] = useState(defaultValue);
 
   useEffect(() => {
     setFormattedValue(formatQuantity(defaultValue));
@@ -39,7 +39,7 @@ export default function CurrencyInput({ name, label, autocomplete }) {
         numbervalue={numberValue}
         onValueChange={values => {
           setFormattedValue(values.formattedValue);
-          setDecimalValue(values.value);
+          setNumberValue(values.value);
         }}
         ref={ref}
         autoComplete={autocomplete}
