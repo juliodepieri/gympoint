@@ -40,14 +40,17 @@ export default function Student(props) {
     const name = e.target.value;
     const response = await api.get('students', { params: { name } });
     setStudents(calculateAgeStudents(response.data));
-    console.tron.log('teste');
   }
 
   async function handleDeleteStudent(studentId) {
     try {
-      await api.delete(`students/${studentId}`);
-
-      setStudents(students.filter(student => student.id !== studentId));
+      const response = window.confirm(
+        'Tem certeza que deseja excluir este registro?'
+      );
+      if (response) {
+        await api.delete(`students/${studentId}`);
+        setStudents(students.filter(student => student.id !== studentId));
+      }
     } catch (err) {
       console.tron.log(err);
     }
@@ -91,6 +94,8 @@ export default function Student(props) {
               <td>
                 <div>
                   <EditButton
+                    type="button"
+                    title="Editar"
                     onClick={() =>
                       props.history.push(`/students/${student.id}`)
                     }

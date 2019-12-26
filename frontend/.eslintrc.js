@@ -32,6 +32,10 @@ module.exports = {
     "no-console": ["error", { allow: ["tron"] }],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
+    "jsx-a11y/label-has-associated-control": [ 2, {
+      "controlComponents": ["MaskedInput"],
+      "depth": 1,
+    }],
   },
   settings: {
     "import/resolver": {

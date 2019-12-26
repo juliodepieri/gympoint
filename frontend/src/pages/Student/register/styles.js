@@ -72,9 +72,9 @@ export const Content = styled.div`
     }
   }
 
-  div {
+  > div {
     column-count: 3;
     column-gap: 16px;
-    margin-top: 20px;
+    margin: 20px 0 30px 0;
   }
 `;

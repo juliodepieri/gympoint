@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input } from '@rocketseat/unform';
+
 import * as Yup from 'yup';
+import { toast } from 'react-toastify';
 
 import { RegisterHeader, Content, Container } from './styles';
 import api from '~/services/api';
+
+import NumberInput from '~/components/NumberInput';
+import DatePicker from '~/components/DatePicker';
 
 const schema = Yup.object().shape({
   name: Yup.string().required('O nome é obrigatório'),
@@ -11,19 +16,38 @@ const schema = Yup.object().shape({
     .email('Insira um e-mail válido')
     .required('O e-mail é obrigatório'),
   dateOfBirth: Yup.string().required('A data de nascimento é obrigatória'),
-  weight: Yup.string().required('O peso é obrigatório'),
-  height: Yup.string().required('A altura é obrigatória'),
+  weight: Yup.number().required('O peso é obrigatório'),
+  height: Yup.number().required('A altura é obrigatória'),
 });
 
 export default function StudentRegister(props) {
   const [student, setStudent] = useState();
-  const { id } = props.match.params;
+  const { params } = props.match;
+  const { id } = params;
 
-  async function handleSubmit(student) {
-    console.tron.log('Cadastrar', student);
+  useEffect(() => {
+    async function loadStudent() {
+      if (id !== 'new') {
+        const response = await api.get(`/students/${id}`);
+        setStudent(response.data);
+      }
+    }
+    loadStudent();
+  }, [id]);
+
+  async function handleSubmit(data, { resetForm }) {
+    console.tron.log('Cadastrar', data);
     try {
-      await api.post('/students', student);
-      setStudent(null);
+      if (id === 'new') {
+        await api.post('/students', data);
+        resetForm();
+        toast.success('Aluno cadastrado com sucesso.');
+      } else {
+        const response = await api.put(`/students/${id}`, data);
+        console.tron.log(response);
+        toast.success('Aluno atualizado com sucesso.');
+        props.history.push('/students');
+      }
     } catch (err) {
       console.tron.log(err);
     }
@@ -40,7 +64,10 @@ export default function StudentRegister(props) {
           <aside>
             <button
               type="button"
-              onClick={() => props.history.push('/students')}
+              onClick={() => {
+                console.log(student);
+                // props.history.push('/students')
+              }}
             >
               VOLTAR
             </button>
@@ -57,28 +84,11 @@ export default function StudentRegister(props) {
             label="ENDEREÇO DE E-MAIL"
           />
           <div>
-            <Input
-              name="dateOfBirth"
-              type="date"
-              format
-              // min="2000-04-01"
-              // max="2999-04-30"
-              label="DATA DE NASCIMENTO"
-            />
-            <Input
-              name="weight"
-              type="number"
-              min="0"
-              step=".01"
-              label="PESO (em kg)"
-            />
-            <Input
-              name="height"
-              type="number"
-              step=".01"
-              min="0"
-              label="ALTURA (em metros)"
-            />
+            <DatePicker name="dateOfBirth" label="DATA DE NASCIMENTO" />
+
+            <NumberInput name="weight" label="PESO (em kg)" />
+
+            <NumberInput name="height" label="ALTURA (em metros)" />
           </div>
         </Content>
       </Form>
