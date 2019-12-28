@@ -1,5 +1,4 @@
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import styled, { createGlobalStyle } from 'styled-components';
 
 export const Container = styled.div`
   display: flex;
@@ -9,6 +8,28 @@ export const Container = styled.div`
   padding: 0 120px;
   justify-content: space-between;
   align-items: center;
+
+  .confirm-dialog-content {
+    width: 90%;
+    max-width: 550px;
+
+    p {
+      line-height: 1.5em;
+      text-align: left;
+    }
+
+    p:last-child {
+      margin-top: 5px;
+      color: #fc3903;
+      font-weight: bold;
+    }
+
+    strong {
+      font-size: 24px;
+      line-height: 1.5em;
+      color: #444;
+    }
+  }
 `;
 
 export const StudentFilter = styled.div`

@@ -15,7 +15,6 @@ export default function DatePicker({ name, label }) {
   const [selected, setSelected] = useState(defaultValue);
 
   useEffect(() => {
-    console.tron.log('-----------');
     if (defaultValue) {
       setSelected(
         isValid(defaultValue) ? defaultValue : parseISO(defaultValue)

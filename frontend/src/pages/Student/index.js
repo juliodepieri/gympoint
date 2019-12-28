@@ -11,6 +11,8 @@ import {
   DeleteButton,
 } from './styles';
 
+import { confirmDialog } from '~/components/ConfirmDialog';
+
 export default function Student(props) {
   const [students, setStudents] = useState([]);
 
@@ -42,27 +44,43 @@ export default function Student(props) {
     setStudents(calculateAgeStudents(response.data));
   }
 
-  async function handleDeleteStudent(studentId) {
-    try {
-      const response = window.confirm(
-        'Tem certeza que deseja excluir este registro?'
-      );
-      if (response) {
-        await api.delete(`students/${studentId}`);
-        setStudents(students.filter(student => student.id !== studentId));
+  function deleteWithConfirmation(id) {
+    async function handleDeleteStudent() {
+      try {
+        await api.delete(`students/${id}`);
+        setStudents(students.filter(student => student.id !== id));
+      } catch (err) {
+        console.tron.log(err);
       }
-    } catch (err) {
-      console.tron.log(err);
     }
+
+    confirmDialog({
+      title: 'Exclusão',
+      onConfirm: handleDeleteStudent,
+      ownerId: 'container',
+      message: (
+        <>
+          <p>Tem certeza que deseja excluir o aluno?</p>
+          <p>
+            Atenção, você pode estar fazendo merda, esta ação é irreversível!
+          </p>
+        </>
+      ),
+    });
   }
 
   return (
-    <Container>
+    <Container id="container">
       <StudentFilter>
         <strong>Gerenciando alunos</strong>
 
         <aside>
-          <button type="button">CADASTRAR</button>
+          <button
+            type="button"
+            onClick={() => props.history.push('/students-register')}
+          >
+            CADASTRAR
+          </button>
           <input
             type="text"
             placeholder="Buscar aluno"
@@ -105,7 +123,7 @@ export default function Student(props) {
                   <DeleteButton
                     type="button"
                     title="Excluir"
-                    onClick={() => handleDeleteStudent(student.id)}
+                    onClick={() => deleteWithConfirmation(student.id)}
                   >
                     <MdDelete size={20} />
                   </DeleteButton>
