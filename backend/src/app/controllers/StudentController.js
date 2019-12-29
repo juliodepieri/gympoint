@@ -1,13 +1,15 @@
 import * as Yup from 'yup';
-import Sequelize, { Op } from 'sequelize';
+import { Op } from 'sequelize';
 import Student from '../models/Student';
 
 class StudentController {
   async index(req, res) {
-    const { name, page = 1 } = req.query;
+    const { name, page = 1, pageSize = 2 } = req.query;
+    const pageLimit = pageSize > 20 ? 20 : pageSize;
+
     const query = {
-      limit: 20,
-      offset: (page - 1) * 20,
+      limit: pageLimit,
+      offset: (page - 1) * pageLimit,
       order: ['name'],
       attributes: ['id', 'name', 'email', 'dateOfBirth', 'weight', 'height'],
     };
@@ -20,9 +22,14 @@ class StudentController {
       };
     }
 
-    const students = await Student.findAll(query);
+    const students = await Student.findAndCountAll(query);
 
     return res.json(students);
+  }
+
+  async show(req, res) {
+    const { id } = req.params;
+    return res.json(await Student.findByPk(id));
   }
 
   async store(req, res) {
@@ -84,7 +91,7 @@ class StudentController {
       }
     }
 
-    const { id, name, birthOfDate, weight, height } = await student.update(
+    const { id, name, dateOfBirth, weight, height } = await student.update(
       req.body
     );
 
@@ -92,7 +99,7 @@ class StudentController {
       id,
       name,
       email,
-      birthOfDate,
+      dateOfBirth,
       weight,
       height,
     });
