@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import colors from '~/styles/colors';
 
 export const Container = styled.div`
   display: flex;
@@ -20,27 +21,25 @@ export const RegisterHeader = styled.div`
 
   strong {
     font-size: 24px;
-    color: #444;
+    color: ${colors.textLabel};
   }
 
   button {
     width: 112px;
     height: 36px;
-    background: #ee4d64;
+    background: ${colors.primary};
     border: none;
     border-radius: 4px;
-    color: #fff;
+    color: ${colors.buttonText};
     margin-right: 15px;
   }
-
-  /* #CCCCCC  */
 `;
 
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
   padding: 15px 30px 0 30px;
-  background: #fff;
+  background: ${colors.backgroundData};
 
   label {
     /* font-family: Roboto; */
@@ -49,26 +48,26 @@ export const Content = styled.div`
     font-size: 14px;
     line-height: 16px;
 
-    color: #444;
+    color: ${colors.textLabel};
     margin-top: 20px;
   }
 
   input {
     width: 100%;
-    background: rgba(255, 255, 255, 0.1);
+    background: ${colors.inputBackground};
     height: 36px;
     width: 100%;
     padding: 0 15px;
-    color: #444;
+    color: ${colors.textLabel};
 
-    border: 1px solid #dddddd;
+    border: 1px solid ${colors.inputBorder};
     box-sizing: border-box;
     border-radius: 4px;
     margin-right: 16px;
     margin-top: 8px;
 
     &::placeholder {
-      color: rgba(0, 0, 0, 0.4);
+      color: ${colors.textDisable};
     }
   }
 

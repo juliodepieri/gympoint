@@ -1,4 +1,5 @@
-import styled, { createGlobalStyle } from 'styled-components';
+import styled from 'styled-components';
+import colors from '~/styles/colors';
 
 export const Container = styled.div`
   display: flex;
@@ -20,14 +21,14 @@ export const Container = styled.div`
 
     p:last-child {
       margin-top: 5px;
-      color: #fc3903;
+      color: ${colors.warning};
       font-weight: bold;
     }
 
     strong {
       font-size: 24px;
       line-height: 1.5em;
-      color: #444;
+      color: ${colors.textLabel};
     }
   }
 `;
@@ -42,39 +43,39 @@ export const StudentFilter = styled.div`
 
   strong {
     font-size: 24px;
-    color: #444;
+    color: ${colors.textLabel};
   }
 
   button {
     width: 142px;
     height: 36px;
-    background: #ee4d64;
+    background: ${colors.primary};
     border: none;
     border-radius: 4px;
-    color: #fff;
+    color: ${colors.buttonText};
     margin-right: 15px;
   }
 
   input {
-    background: rgba(255, 255, 255, 0.1);
+    background: ${colors.inputBackground};
     height: 36px;
     width: 237px;
     padding: 0 15px;
-    color: #444;
+    color: ${colors.textLabel};
 
-    border: 1px solid #dddddd;
+    border: 1px solid ${colors.inputBorder};
     box-sizing: border-box;
     border-radius: 4px;
 
     &::placeholder {
-      color: rgba(0, 0, 0, 0.4);
+      color: ${colors.inputPlaceHolder};
     }
   }
 `;
 
 export const StudentTable = styled.table`
   width: 100%;
-  background: #fff;
+  background: ${colors.backgroundData};
   border-radius: 4px;
   padding: 30px 30px 0 30px;
   border-spacing: 0;
@@ -82,7 +83,7 @@ export const StudentTable = styled.table`
   table-layout: fixed;
 
   thead {
-    color: #444;
+    color: ${colors.textLabel};
     font-size: 16px;
     text-align: left;
     vertical-align: bottom;
@@ -108,8 +109,8 @@ export const StudentTable = styled.table`
     }
 
     td {
-      color: #666;
-      border-bottom: 1px solid #eee;
+      color: ${colors.text};
+      border-bottom: 1px solid ${colors.tableLine};
       overflow: hidden;
       text-overflow: ellipsis;
 
@@ -122,14 +123,14 @@ export const StudentTable = styled.table`
 `;
 
 export const EditButton = styled.button`
-  color: #4d85ee;
+  color: ${colors.blue};
   border: none;
   background: none;
   margin: 0 5px;
 `;
 
 export const DeleteButton = styled.button`
-  color: #de3b3b;
+  color: ${colors.red};
   border: none;
   background: none;
   margin: 0 5px;

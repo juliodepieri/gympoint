@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import { darken } from 'polished';
+import colors from '~/styles/colors';
 
 export const Wrapper = styled.div`
   height: 100%;
-  background: #ee4d64;
+  background: ${colors.primary};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,7 +21,7 @@ export const Content = styled.div`
     margin-top: 30px;
     padding: 30px;
     width: 360px;
-    background: #fff;
+    background: ${colors.backgroundData};
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     border-radius: 4px;
 
@@ -29,40 +30,40 @@ export const Content = styled.div`
     }
 
     label {
-      color: #444444;
+      color: ${colors.textLabel};
       font-weight: bold;
       text-align: left;
       margin: 25px 0 5px 0;
     }
 
     input {
-      background: rgba(255, 255, 255, 0.1);
+      background: ${colors.inputBackground};
       height: 44px;
       padding: 0 15px;
-      color: #444444;
+      color: ${colors.text};
 
-      border: 1px solid #dddddd;
+      border: 1px solid ${colors.inputBorder};
       box-sizing: border-box;
       border-radius: 4px;
 
       &::placeholder {
-        color: rgba(0, 0, 0, 0.4);
+        color: ${colors.textDisable};
       }
     }
 
     button {
       margin: 25px 0 0;
       height: 44px;
-      background: #ee4d64;
+      background: ${colors.primary};
       font-weight: bold;
-      color: #fff;
+      color: ${colors.buttonText};
       border: 0;
       border-radius: 4px;
       font-size: 16px;
       transition: background 0.2s;
 
       &:hover {
-        background: ${darken(0.03, '#3b9eff')};
+        background: ${darken(0.03, colors.primary)};
       }
     }
 

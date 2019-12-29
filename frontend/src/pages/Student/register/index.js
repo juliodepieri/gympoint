@@ -65,8 +65,7 @@ export default function StudentRegister(props) {
             <button
               type="button"
               onClick={() => {
-                console.log(student);
-                // props.history.push('/students')
+                props.history.push('/students');
               }}
             >
               VOLTAR

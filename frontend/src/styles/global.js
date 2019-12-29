@@ -47,7 +47,7 @@ export default createGlobalStyle`
 
   input + span {
     display: flex;
-    color: #eb4949;
+    color: #DE3B3B;
     margin: 0 0 10px;
     font-weight: bold;
     margin-top: 5px;
