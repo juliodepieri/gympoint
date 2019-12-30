@@ -1,58 +1,102 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef, Suspense } from 'react';
 import PropTypes from 'prop-types';
 
 import { MdNavigateBefore, MdNavigateNext } from 'react-icons/md';
 
 import { PaginationWrapper, Button } from './styles';
 
-export default function Pagination({ callback }) {
+function range(start, stop, step) {
+  return Array.from(
+    { length: (stop - start) / step + 1 },
+    (_, i) => start + i * step
+  );
+}
+
+export default function Pagination({
+  onChange,
+  pageRangeDisplayed,
+  totalPages,
+}) {
   const [currentPage, setCurrentPage] = useState(1);
+  const hasMount = useRef(false);
 
-  const range = (start, stop, step) =>
-    Array.from(
-      { length: (stop - start) / step + 1 },
-      (_, i) => start + i * step
-    );
+  const pagesDisplayed = useMemo(() => {
+    if (pageRangeDisplayed > totalPages) return range(1, totalPages);
 
-  const pages = useMemo(() => {
-    if (currentPage <= 5) {
-      return range(1, 5, 1);
+    const middlePoint = Math.ceil(pageRangeDisplayed / 2);
+    const isRangeOdd = pageRangeDisplayed % 2 !== 0;
+
+    if (currentPage <= middlePoint) {
+      return range(1, pageRangeDisplayed, 1);
     }
-    return range(currentPage - 2, currentPage + 2, 1);
-  }, [currentPage]);
+
+    const isTheLastPage = currentPage === totalPages;
+    const isTheSecondToLastPage = currentPage + 1 >= totalPages;
+
+    if (isTheLastPage || isTheSecondToLastPage) {
+      return range(totalPages - (pageRangeDisplayed - 1), totalPages, 1);
+    }
+
+    const left = isRangeOdd ? middlePoint - 1 : middlePoint;
+    const right = isRangeOdd ? middlePoint - 1 : middlePoint - 1;
+    return range(
+      currentPage - left,
+      totalPages >= currentPage + right ? currentPage + right : totalPages,
+      1
+    );
+  }, [currentPage, pageRangeDisplayed, totalPages]);
 
   useEffect(() => {
-    callback(currentPage);
-  }, [callback, currentPage]);
+    if (hasMount.current) {
+      onChange(currentPage);
+    } else {
+      hasMount.current = true;
+    }
+  }, [currentPage, onChange]);
 
-  function handleNext() {
-    setCurrentPage(currentPage + 1);
+  function handleNextPage() {
+    setCurrentPage(prev => prev + 1);
   }
 
-  function handlePrevious() {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+  function handlePreviousPage() {
+    setCurrentPage(prev => prev - 1);
+  }
+
+  function selectPage(page) {
+    if (page !== currentPage) {
+      setCurrentPage(page);
+      onChange(page);
     }
   }
 
   return (
     <PaginationWrapper>
-      <Button type="button" title="Página anterior" onClick={handlePrevious}>
+      <Button
+        type="button"
+        title="Página anterior"
+        onClick={() => handlePreviousPage()}
+        disabled={currentPage === 1}
+      >
         <MdNavigateBefore />
       </Button>
 
-      {pages.map(p => (
+      {pagesDisplayed.map(p => (
         <Button
           key={String(p)}
           type="button"
-          onClick={() => setCurrentPage(p)}
+          onClick={() => selectPage(p)}
           active={p === currentPage}
         >
           {p}
         </Button>
       ))}
 
-      <Button type="button" title="Próxima página" onClick={handleNext}>
+      <Button
+        type="button"
+        title="Próxima página"
+        onClick={() => handleNextPage()}
+        disabled={currentPage === totalPages}
+      >
         <MdNavigateNext />
       </Button>
     </PaginationWrapper>
@@ -60,5 +104,7 @@ export default function Pagination({ callback }) {
 }
 
 Pagination.propTypes = {
-  callback: PropTypes.objectOf(PropTypes.func).isRequired,
+  onChange: PropTypes.func.isRequired,
+  pageRangeDisplayed: PropTypes.number.isRequired,
+  totalPages: PropTypes.number.isRequired,
 };

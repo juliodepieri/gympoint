@@ -15,7 +15,6 @@ function removeElementConfirmDialog() {
   const divDialog = document.getElementById('confirm-dialog');
   if (divDialog) {
     divDialog.parentNode.removeChild(divDialog);
-    // divDialog.style.display = 'none';
   }
 }
 
@@ -32,7 +31,6 @@ function createElementConfirmDialog(properties) {
     divDialog.id = 'confirm-dialog';
     owner.appendChild(divDialog);
   }
-  // divDialog.style.display = 'block';
 
   render(<ConfirmDialog {...properties} />, divDialog);
 }

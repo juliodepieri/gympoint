@@ -16,11 +16,12 @@ export const Button = styled.button`
   width: 22px;
   height: 22px;
   border-radius: 4px;
-  color: ${colors.text}
-    ${props =>
-      props.active &&
-      css`
-        background-color: ${colors.darkPrimary};
-        color: ${colors.buttonText};
-      `};
+  color: ${colors.text};
+
+  ${props =>
+    props.active &&
+    css`
+      background-color: ${colors.darkPrimary};
+      color: ${colors.buttonText};
+    `};
 `;

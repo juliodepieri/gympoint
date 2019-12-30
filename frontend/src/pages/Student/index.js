@@ -17,21 +17,31 @@ import Pagination from '~/components/Pagination';
 export default function Student(props) {
   const [students, setStudents] = useState([]);
   const [searchName, setSearchName] = useState('');
+  const [totalPages, setTotalPages] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const loadStudents = useCallback(
     async (page = 1) => {
+      setIsLoading(true);
+      const pageSize = 2;
+
       const response = await api.get('students', {
         params: {
           name: searchName,
           page,
+          pageSize,
         },
       });
 
-      const data = response.data.rows.map(student => ({
+      const { count, rows } = response.data;
+
+      const data = rows.map(student => ({
         ...student,
         age: differenceInYears(new Date(), parseISO(student.dateOfBirth)),
       }));
       setStudents(data);
+      setTotalPages(Math.ceil(count / pageSize));
+      setIsLoading(false);
     },
     [searchName]
   );
@@ -57,9 +67,7 @@ export default function Student(props) {
       message: (
         <>
           <p>Tem certeza que deseja excluir o aluno?</p>
-          <p>
-            Atenção, você pode estar fazendo merda, esta ação é irreversível!
-          </p>
+          <p>Atenção, esta ação é irreversível!</p>
         </>
       ),
     });
@@ -86,6 +94,7 @@ export default function Student(props) {
         </aside>
       </StudentFilter>
 
+      {isLoading ? <div>Loading ...</div> : ''}
       <StudentTable>
         <colgroup>
           <col span="3" />
@@ -138,7 +147,11 @@ export default function Student(props) {
           )}
         </tbody>
       </StudentTable>
-      <Pagination callback={loadStudents} />
+      <Pagination
+        onChange={loadStudents}
+        totalPages={totalPages}
+        pageRangeDisplayed={6}
+      />
     </Container>
   );
 }
