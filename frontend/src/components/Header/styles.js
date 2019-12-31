@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import colors from '~/styles/colors';
 
 export const Container = styled.div`
@@ -23,24 +24,21 @@ export const Content = styled.div`
       padding-right: 20px;
       border-right: 1px solid ${colors.separator};
     }
-
-    ul {
-      display: flex;
-
-      li {
-        margin: 0 10px 0;
-      }
-    }
-
-    a {
-      font-weight: bold;
-      color: ${colors.textDisable};
-    }
   }
 
   aside {
     display: flex;
     align-items: center;
+  }
+`;
+
+export const LinkMenu = styled(Link)`
+  font-weight: bold;
+  margin: 0 10px 0;
+  color: ${props => (props.active ? colors.textLabel : colors.textDisable)};
+
+  &:hover {
+    color: ${colors.text};
   }
 `;
 

@@ -1,18 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { parseISO, differenceInYears } from 'date-fns';
-import { MdModeEdit, MdDelete } from 'react-icons/md';
+import { MdModeEdit, MdDelete, MdSearch } from 'react-icons/md';
 import api from '~/services/api';
 
 import {
   Container,
   StudentTable,
-  StudentFilter,
+  Title,
   EditButton,
   DeleteButton,
 } from './styles';
 
 import { confirmDialog } from '~/components/ConfirmDialog';
 import Pagination from '~/components/Pagination';
+import InputIcon from '~/components/InputIcon';
 
 export default function Student(props) {
   const [students, setStudents] = useState([]);
@@ -23,7 +24,7 @@ export default function Student(props) {
   const loadStudents = useCallback(
     async (page = 1) => {
       setIsLoading(true);
-      const pageSize = 2;
+      const pageSize = 10;
 
       const response = await api.get('students', {
         params: {
@@ -75,24 +76,25 @@ export default function Student(props) {
 
   return (
     <Container id="container">
-      <StudentFilter>
+      <Title>
         <strong>Gerenciando alunos</strong>
-
-        <aside>
+        <div>
           <button
             type="button"
             onClick={() => props.history.push('/students/new')}
           >
             CADASTRAR
           </button>
-          <input
+          <InputIcon
             type="text"
             placeholder="Buscar aluno"
             value={searchName}
             onChange={e => setSearchName(e.target.value)}
-          />
-        </aside>
-      </StudentFilter>
+          >
+            <MdSearch />
+          </InputIcon>
+        </div>
+      </Title>
 
       {isLoading ? <div>Loading ...</div> : ''}
       <StudentTable>

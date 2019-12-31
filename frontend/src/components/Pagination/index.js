@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useMemo, useRef, Suspense } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { MdNavigateBefore, MdNavigateNext } from 'react-icons/md';
 
 import { PaginationWrapper, Button } from './styles';
 
-function range(start, stop, step) {
+function range(start, stop, step = 1) {
   return Array.from(
     { length: (stop - start) / step + 1 },
     (_, i) => start + i * step
@@ -27,22 +27,21 @@ export default function Pagination({
     const isRangeOdd = pageRangeDisplayed % 2 !== 0;
 
     if (currentPage <= middlePoint) {
-      return range(1, pageRangeDisplayed, 1);
+      return range(1, pageRangeDisplayed);
     }
 
     const isTheLastPage = currentPage === totalPages;
     const isTheSecondToLastPage = currentPage + 1 >= totalPages;
 
     if (isTheLastPage || isTheSecondToLastPage) {
-      return range(totalPages - (pageRangeDisplayed - 1), totalPages, 1);
+      return range(totalPages - (pageRangeDisplayed - 1), totalPages);
     }
 
     const left = isRangeOdd ? middlePoint - 1 : middlePoint;
     const right = isRangeOdd ? middlePoint - 1 : middlePoint - 1;
     return range(
       currentPage - left,
-      totalPages >= currentPage + right ? currentPage + right : totalPages,
-      1
+      totalPages >= currentPage + right ? currentPage + right : totalPages
     );
   }, [currentPage, pageRangeDisplayed, totalPages]);
 

@@ -33,7 +33,7 @@ export const Container = styled.div`
   }
 `;
 
-export const StudentFilter = styled.div`
+export const Title = styled.div`
   display: flex;
   width: 100%;
   height: 86px;
@@ -46,29 +46,24 @@ export const StudentFilter = styled.div`
     color: ${colors.textLabel};
   }
 
-  button {
-    width: 142px;
-    height: 36px;
-    background: ${colors.primary};
-    border: none;
-    border-radius: 4px;
-    color: ${colors.buttonText};
-    margin-right: 15px;
-  }
+  > div {
+    display: flex;
+    align-items: center;
 
-  input {
-    background: ${colors.inputBackground};
-    height: 36px;
-    width: 237px;
-    padding: 0 15px;
-    color: ${colors.textLabel};
+    button {
+      width: 142px;
+      height: 36px;
+      background: ${colors.primary};
+      border: none;
+      border-radius: 4px;
+      color: ${colors.buttonText};
+      margin-right: 15px;
+    }
 
-    border: 1px solid ${colors.inputBorder};
-    box-sizing: border-box;
-    border-radius: 4px;
-
-    &::placeholder {
-      color: ${colors.inputPlaceHolder};
+    input {
+      height: 36px;
+      width: 237px;
+      padding: 0 8px 0 15px;
     }
   }
 `;

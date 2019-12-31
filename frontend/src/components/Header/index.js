@@ -1,19 +1,30 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import logo from '~/assets/logo-header.svg';
 
 import { signOut } from '~/store/modules/auth/actions';
 
-import { Container, Content, Profile } from './styles';
+import { Container, Content, Profile, LinkMenu } from './styles';
 
-export default function Header() {
+function Header(props) {
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
+  const menus = [
+    { name: 'ALUNOS', to: '/students' },
+    { name: 'PLANOS', to: '/plans' },
+    { name: 'MATRÍCULAS', to: '/enrollments' },
+    { name: 'PEDIDOS DE AUXÍLIO', to: '/orders' },
+  ];
 
   function handleSignOut() {
     dispatch(signOut());
+  }
+
+  function isActive(path) {
+    return path === props.location.pathname;
   }
 
   return (
@@ -21,20 +32,15 @@ export default function Header() {
       <Content>
         <nav>
           <img src={logo} alt="Gympoint" />
-          <ul>
-            <li>
-              <Link to="/students">ALUNOS</Link>
-            </li>
-            <li>
-              <Link to="/students">PLANOS</Link>
-            </li>
-            <li>
-              <Link to="/students">MATRÍCULAS</Link>
-            </li>
-            <li>
-              <Link to="/students">PEDIDOS DE AUXÍLIO</Link>
-            </li>
-          </ul>
+          {menus.map(menu => (
+            <LinkMenu
+              key={menu.name}
+              to={menu.to}
+              active={isActive(menu.to) ? 1 : 0}
+            >
+              {menu.name}
+            </LinkMenu>
+          ))}
         </nav>
 
         <aside>
@@ -51,3 +57,11 @@ export default function Header() {
     </Container>
   );
 }
+
+Header.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }).isRequired,
+};
+
+export default withRouter(Header);

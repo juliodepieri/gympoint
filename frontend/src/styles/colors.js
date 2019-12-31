@@ -1,7 +1,6 @@
 import { darken } from 'polished';
 
 export default {
-  // theme
   primary: '#ee4d64',
   darkPrimary: darken(0.08, '#ee4d64'),
   red: '#de3b3b',
