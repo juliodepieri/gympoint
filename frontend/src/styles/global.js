@@ -52,4 +52,5 @@ export default createGlobalStyle`
     font-weight: bold;
     margin-top: 5px;
   }
+
 `;

@@ -9,26 +9,38 @@ import api from '~/services/api';
 import { RegisterHeader, Content, Container } from './styles';
 import NumberInput from '~/components/NumberInput';
 import DatePicker from '~/components/DatePicker';
-import Select from '~/components/Select';
+import AsyncSelectInput from '~/components/AsyncSelectInput';
+import SelectInput from '~/components/SelectInput';
 
 const schema = Yup.object().shape({
-  student: Yup.string().required('O aluno é obrigatório'),
+  student: Yup.object().required('O aluno é obrigatório'),
+  plan: Yup.object().required('O plano é obrigatório'),
   start_date: Yup.string().required('A data de início é obrigatória'),
   end_date: Yup.string().required('A data de término é obrigatória'),
 });
 
 export default function EnrollmentRegister({ match, history }) {
   const [enrollment, setEnrollment] = useState();
+  const [plans, setPlans] = useState([]);
   const { id } = match.params;
+
+  useEffect(() => {
+    async function loadPlans() {
+      const response = await api.get(`/plans`);
+      setPlans(response.data);
+    }
+
+    loadPlans();
+  }, []);
 
   useEffect(() => {
     async function loadEnrollment() {
       if (id !== 'new') {
         const response = await api.get(`/enrollments/${id}`);
-        console.log('teste 1');
         setEnrollment(response.data);
       }
     }
+
     loadEnrollment();
   }, [id]);
 
@@ -84,25 +96,41 @@ export default function EnrollmentRegister({ match, history }) {
         </RegisterHeader>
 
         <Content>
-          <Select
+          <AsyncSelectInput
             name="student"
             loadOptions={loadOptions}
             label="ALUNO"
-            className="select"
             getOptionValue={option => option.id}
             getOptionLabel={option => option.name}
+            placeholder="Buscar Aluno"
           />
           <div className="row">
-            <DatePicker label="DATA DE INÍCIO" name="start_date" />
+            <span>
+              <SelectInput
+                name="plan"
+                options={plans}
+                label="PLANO"
+                placeholder="Selecione o Plano"
+                getOptionLabel={option => option.title}
+              />
+            </span>
 
-            <DatePicker label="DATA DE TÉRMINO" name="end_date" />
+            <span>
+              <DatePicker label="DATA DE INÍCIO" name="start_date" />
+            </span>
 
-            <NumberInput
-              label="VALOR FINAL"
-              name="totalPrice"
-              disabled
-              defaultValue={0}
-            />
+            <span>
+              <DatePicker label="DATA DE TÉRMINO" name="end_date" />
+            </span>
+
+            <span>
+              <NumberInput
+                label="VALOR FINAL"
+                name="totalPrice"
+                disabled
+                defaultValue={0}
+              />
+            </span>
           </div>
         </Content>
       </Form>

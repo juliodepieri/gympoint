@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
-import AsyncSelect from 'react-select/async';
+import React, { useRef, useEffect, useState } from 'react';
+import Select from 'react-select';
 import PropTypes from 'prop-types';
 
 import { useField } from '@rocketseat/unform';
 
-export default function Select({
+export default function SelectInput({
   name,
   label,
-  loadOptions,
+  options,
   multiple,
   getOptionValue,
   getOptionLabel,
@@ -22,32 +22,20 @@ export default function Select({
   }, [defaultValue]);
 
   function parseSelectValue(selectRef) {
-    const selectValue = selectRef.select.state.value;
+    const selectValue = selectRef.props.value;
 
     if (!multiple) {
-      return selectValue || '';
+      return selectValue || null;
     }
 
     return selectValue ? selectValue.map(option => option.id) : [];
-  }
-
-  function getDefaultValue() {
-    if (!defaultValue) return null;
-
-    const { options } = ref.current.select.props;
-
-    if (!multiple) {
-      return options.find(option => option.id === defaultValue.id);
-    }
-
-    return options.filter(option => defaultValue.includes(option.id));
   }
 
   useEffect(() => {
     registerField({
       name: fieldName,
       ref: ref.current,
-      path: 'select.state.value',
+      path: 'state.value',
       parseValue: parseSelectValue,
       clearValue: selectRef => {
         selectRef.select.clearValue();
@@ -57,41 +45,39 @@ export default function Select({
 
   return (
     <>
-      <label htmlFor={fieldName}>{label}</label>
-      <AsyncSelect
-        cacheOptions
-        defaultOptions
-        isClearable
-        className="async"
-        classNamePrefix="select"
-        value={value}
-        loadOptions={inputValue => loadOptions(inputValue)}
+      {label && <label htmlFor={fieldName}>{label}</label>}
+
+      <Select
         name={fieldName}
-        id={fieldName}
+        aria-label={fieldName}
+        className="select"
+        classNamePrefix="select"
+        options={options}
         isMulti={multiple}
-        defaultValue={getDefaultValue()}
+        ref={ref}
         getOptionValue={getOptionValue}
         getOptionLabel={getOptionLabel}
+        value={value}
         onChange={v => setValue(v)}
-        ref={ref}
         {...rest}
       />
+
       {error && <span>{error}</span>}
     </>
   );
 }
 
-Select.propTypes = {
+SelectInput.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   multiple: PropTypes.bool,
-  loadOptions: PropTypes.func.isRequired,
+  options: PropTypes.arrayOf(PropTypes.object).isRequired,
   getOptionValue: PropTypes.func,
   getOptionLabel: PropTypes.func,
   rest: PropTypes.element,
 };
 
-Select.defaultProps = {
+SelectInput.defaultProps = {
   label: null,
   multiple: false,
   rest: null,

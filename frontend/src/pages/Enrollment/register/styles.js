@@ -6,7 +6,6 @@ export const Container = styled.div`
   flex-direction: column;
   max-width: 900px;
   margin: 0 auto;
-  padding: 0 120px;
   justify-content: space-between;
   align-items: center;
 `;
@@ -31,7 +30,7 @@ export const RegisterHeader = styled.div`
     border: none;
     border-radius: 4px;
     color: ${colors.buttonText};
-    margin-right: 15px;
+    margin-left: 15px;
   }
 `;
 
@@ -42,14 +41,13 @@ export const Content = styled.div`
   background: ${colors.backgroundData};
 
   label {
-    /* font-family: Roboto; */
     font-style: normal;
     font-weight: bold;
     font-size: 14px;
     line-height: 16px;
+    margin-top: 20px;
 
     color: ${colors.textLabel};
-    margin-top: 20px;
   }
 
   input {
@@ -58,33 +56,39 @@ export const Content = styled.div`
     width: 100%;
     padding: 0 15px;
     color: ${colors.textLabel};
+    height: 36px;
+    margin-top: 8px;
 
     border: 1px solid ${colors.inputBorder};
     box-sizing: border-box;
     border-radius: 4px;
-    margin-right: 16px;
 
     &::placeholder {
       color: ${colors.textDisable};
     }
   }
 
+  .async-select,
   .select {
+    height: 36px;
+    min-width: 200px;
     margin-top: 8px;
+    color: ${colors.text};
 
-    div {
-      color: ${colors.textLabel};
+    .async-select__placeholder,
+    .select__placeholder {
+      color: ${colors.textDisable};
+    }
+
+    input {
+      height: auto;
     }
   }
 
   .row {
-    column-count: 3;
-    column-gap: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 20px;
     margin: 20px 0 30px 0;
-
-    input {
-      height: 36px;
-      margin-top: 8px;
-    }
   }
 `;

@@ -6,7 +6,6 @@ export const Container = styled.div`
   flex-direction: column;
   max-width: 900px;
   margin: 0 auto;
-  padding: 0 120px;
   justify-content: space-between;
   align-items: center;
 `;
@@ -31,7 +30,7 @@ export const RegisterHeader = styled.div`
     border: none;
     border-radius: 4px;
     color: ${colors.buttonText};
-    margin-right: 15px;
+    margin-left: 15px;
   }
 `;
 

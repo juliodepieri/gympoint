@@ -15,7 +15,7 @@ import {
 import { confirmDialog } from '~/components/ConfirmDialog';
 import Pagination from '~/components/Pagination';
 
-export default function Enrollment(props) {
+export default function Enrollment({ history }) {
   const [enrollments, setEnrollments] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -86,6 +86,14 @@ export default function Enrollment(props) {
     <Container id="container">
       <Title>
         <strong>Gerenciando matrículas</strong>
+        <div>
+          <button
+            type="button"
+            onClick={() => history.push('/enrollments/new')}
+          >
+            CADASTRAR
+          </button>
+        </div>
       </Title>
 
       {isLoading ? <div>Loading ...</div> : ''}
@@ -125,7 +133,7 @@ export default function Enrollment(props) {
                     type="button"
                     title="Editar"
                     onClick={() =>
-                      props.history.push(`/enrollments/${enrollment.id}`)
+                      history.push(`/enrollments/${enrollment.id}`)
                     }
                   >
                     <MdModeEdit size={20} />
