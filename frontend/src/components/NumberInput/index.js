@@ -4,17 +4,21 @@ import PropTypes from 'prop-types';
 
 import { useField } from '@rocketseat/unform';
 
-import { formatQuantity } from '~/util/format';
+import { formatQuantity, formatPrice } from '~/util/format';
 
-export default function CurrencyInput({ name, label, autocomplete }) {
+export default function CurrencyInput({ name, label, isCurrency, ...rest }) {
   const ref = useRef(null);
   const { fieldName, registerField, defaultValue, error } = useField(name);
   const [formattedValue, setFormattedValue] = useState(defaultValue);
   const [numberValue, setNumberValue] = useState(defaultValue);
 
   useEffect(() => {
-    setFormattedValue(formatQuantity(defaultValue));
-  }, [defaultValue]);
+    if (isCurrency) {
+      setFormattedValue(formatQuantity(defaultValue));
+    } else {
+      setFormattedValue(formatPrice(defaultValue));
+    }
+  }, [defaultValue, isCurrency]);
 
   useEffect(() => {
     registerField({
@@ -42,10 +46,11 @@ export default function CurrencyInput({ name, label, autocomplete }) {
           setNumberValue(values.value);
         }}
         ref={ref}
-        autoComplete={autocomplete}
+        autoComplete="off"
         allowedDecimalSeparators="[',']"
         allowNegative="false"
         decimalScale="2"
+        {...rest}
       />
       {error && <span>{error}</span>}
     </>
@@ -55,10 +60,10 @@ export default function CurrencyInput({ name, label, autocomplete }) {
 CurrencyInput.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
-  autocomplete: PropTypes.oneOf(['on', 'off']),
+  isCurrency: PropTypes.bool,
 };
 
 CurrencyInput.defaultProps = {
   label: null,
-  autocomplete: 'off',
+  isCurrency: false,
 };

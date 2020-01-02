@@ -20,9 +20,10 @@ const schema = Yup.object().shape({
   height: Yup.number().required('A altura é obrigatória'),
 });
 
-export default function StudentRegister({ match, history }) {
+export default function StudentRegister(props) {
   const [student, setStudent] = useState();
-  const { id } = match.params;
+  const { params } = props.match;
+  const { id } = params;
 
   useEffect(() => {
     async function loadStudent() {
@@ -45,7 +46,7 @@ export default function StudentRegister({ match, history }) {
         const response = await api.put(`/students/${id}`, data);
         console.tron.log(response);
         toast.success('Aluno atualizado com sucesso.');
-        history.push('/students');
+        props.history.push('/students');
       }
     } catch (err) {
       console.tron.log(err);
@@ -64,7 +65,7 @@ export default function StudentRegister({ match, history }) {
             <button
               type="button"
               onClick={() => {
-                history.push('/students');
+                props.history.push('/students');
               }}
             >
               VOLTAR
