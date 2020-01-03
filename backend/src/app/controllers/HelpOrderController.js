@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import HelpOrder from '../models/HelpOrder';
+import Student from '../models/Student';
 
 class HelpOrderController {
   async store(req, res) {
@@ -21,24 +22,34 @@ class HelpOrderController {
   }
 
   async index(req, res) {
-    let helpOrders = {};
+    const { page = 1, pageSize = 20 } = req.query;
+    const pageLimit = pageSize > 20 ? 20 : pageSize;
 
-    if (req.params.id) {
-      helpOrders = await HelpOrder.findAll({
-        order: ['created_at'],
-        where: {
-          student_id: req.params.id,
+    const query = {
+      limit: pageLimit,
+      offset: (page - 1) * pageLimit,
+      order: ['created_at'],
+      include: [
+        {
+          model: Student,
+          as: 'student',
+          attributes: ['id', 'name'],
         },
-      });
+      ],
+    };
+
+    const { id } = req.params;
+    if (id) {
+      query.where = {
+        student_id: id,
+      };
     } else {
-      helpOrders = await HelpOrder.findAll({
-        order: ['created_at'],
-        where: {
-          answer: null,
-        },
-      });
+      query.where = {
+        answer: null,
+      };
     }
 
+    const helpOrders = await HelpOrder.findAndCountAll(query);
     return res.json(helpOrders);
   }
 

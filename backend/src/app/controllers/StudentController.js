@@ -4,7 +4,7 @@ import Student from '../models/Student';
 
 class StudentController {
   async index(req, res) {
-    const { name, page = 1, pageSize = 2 } = req.query;
+    const { name, page = 1, pageSize = 20 } = req.query;
     const pageLimit = pageSize > 20 ? 20 : pageSize;
 
     const query = {

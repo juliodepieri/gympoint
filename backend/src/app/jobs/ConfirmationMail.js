@@ -17,7 +17,7 @@ class ConfirmationMail {
       template: 'enrollmentConfirmation',
       context: {
         student: student.name,
-        plan: plan.tittle,
+        plan: plan.title,
         endDate: format(
           parseISO(enrollment.end_date),
           "'dia' dd 'de' MMMM', às' H:mm'h'",

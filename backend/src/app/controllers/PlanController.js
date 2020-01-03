@@ -5,20 +5,25 @@ class PlanController {
   async index(req, res) {
     const { page = 1 } = req.query;
 
-    const plans = await Plan.findAll({
+    const plans = await Plan.findAndCountAll({
       limit: 20,
       offset: (page - 1) * 20,
       order: ['duration'],
-      attributes: ['tittle', 'duration', 'price'],
+      attributes: ['id', 'title', 'duration', 'price'],
     });
 
     return res.json(plans);
   }
 
+  async show(req, res) {
+    const { id } = req.params;
+    return res.json(await Plan.findByPk(id));
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
-      tittle: Yup.string().required(),
-      duration: Yup.string()
+      title: Yup.string().required(),
+      duration: Yup.number()
         .min(1)
         .required(),
       price: Yup.number()
@@ -30,21 +35,21 @@ class PlanController {
       return res.status(401).json({ error: 'Validation Fails' });
     }
 
-    const tittleExists = await Plan.findOne({
-      where: { tittle: req.body.tittle },
+    const titleExists = await Plan.findOne({
+      where: { title: req.body.title },
     });
 
-    if (tittleExists) {
+    if (titleExists) {
       return res
         .status(400)
-        .json({ error: 'Plan with this tittle already exists' });
+        .json({ error: 'Plan with this title already exists' });
     }
 
-    const { id, tittle, duration, price } = await Plan.create(req.body);
+    const { id, title, duration, price } = await Plan.create(req.body);
 
     return res.json({
       id,
-      tittle,
+      title,
       duration,
       price,
     });
@@ -52,7 +57,7 @@ class PlanController {
 
   async update(req, res) {
     const schema = Yup.object().shape({
-      tittle: Yup.string().required(),
+      title: Yup.string().required(),
       duration: Yup.number()
         .min(1)
         .required(),
@@ -67,11 +72,11 @@ class PlanController {
 
     const plan = await Plan.findByPk(req.params.id);
 
-    const { id, tittle, duration, price } = await plan.update(req.body);
+    const { id, title, duration, price } = await plan.update(req.body);
 
     return res.json({
       id,
-      tittle,
+      title,
       duration,
       price,
     });
