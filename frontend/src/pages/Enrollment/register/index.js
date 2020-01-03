@@ -13,10 +13,13 @@ import AsyncSelectInput from '~/components/AsyncSelectInput';
 import SelectInput from '~/components/SelectInput';
 
 const schema = Yup.object().shape({
-  student: Yup.object().required('O aluno é obrigatório'),
-  plan: Yup.object().required('O plano é obrigatório'),
-  start_date: Yup.string().required('A data de início é obrigatória'),
-  end_date: Yup.string().required('A data de término é obrigatória'),
+  student: Yup.object().shape({
+    id: Yup.number().required('O aluno é obrigatório'),
+  }),
+  plan: Yup.object().shape({
+    id: Yup.number().required('O plano é obrigatório'),
+  }),
+  start_date: Yup.date().required('A data de início é obrigatória'),
 });
 
 export default function EnrollmentRegister({ match, history }) {
@@ -27,7 +30,7 @@ export default function EnrollmentRegister({ match, history }) {
   useEffect(() => {
     async function loadPlans() {
       const response = await api.get(`/plans`);
-      setPlans(response.data);
+      setPlans(response.data.rows);
     }
 
     loadPlans();
@@ -44,19 +47,22 @@ export default function EnrollmentRegister({ match, history }) {
     loadEnrollment();
   }, [id]);
 
-  async function handleSubmit(data, { resetForm }) {
-    console.tron.log('Cadastrar', data);
+  async function handleSubmit({ student, plan, start_date }) {
     try {
+      const data = {
+        plan_id: plan.id,
+        student_id: student.id,
+        start_date,
+      };
+
       if (id === 'new') {
         await api.post('/enrollments', data);
-        resetForm();
         toast.success('Matrícula cadastrado com sucesso.');
       } else {
-        const response = await api.put(`/enrollments/${id}`, data);
-        console.tron.log(response);
+        await api.put(`/enrollments/${id}`, data);
         toast.success('Matrícula atualizada com sucesso.');
-        history.push('/enrollments');
       }
+      history.push('/enrollments');
     } catch (err) {
       console.tron.log(err);
     }
@@ -91,7 +97,7 @@ export default function EnrollmentRegister({ match, history }) {
             >
               VOLTAR
             </button>
-            <button type="submit">CADASTRAR</button>
+            <button type="submit">SALVAR</button>
           </aside>
         </RegisterHeader>
 
@@ -144,5 +150,7 @@ EnrollmentRegister.propTypes = {
       id: PropTypes.string,
     }),
   }).isRequired,
-  history: PropTypes.objectOf(History).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
 };

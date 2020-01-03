@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { parseISO, differenceInYears } from 'date-fns';
-import { MdModeEdit, MdDelete, MdSearch } from 'react-icons/md';
+import { MdModeEdit, MdDelete } from 'react-icons/md';
+import { toast } from 'react-toastify';
+
 import api from '~/services/api';
+import { formatPrice } from '~/util/format';
 
 import {
   Container,
@@ -13,62 +15,58 @@ import {
 
 import { confirmDialog } from '~/components/ConfirmDialog';
 import Pagination from '~/components/Pagination';
-import InputIcon from '~/components/InputIcon';
 
-export default function Student(props) {
-  const [students, setStudents] = useState([]);
-  const [searchName, setSearchName] = useState('');
+export default function Plan({ history }) {
+  const [plans, setPlans] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  const loadStudents = useCallback(
-    async (page = 1) => {
-      setIsLoading(true);
-      const pageSize = 10;
+  const loadPlans = useCallback(async (page = 1) => {
+    setIsLoading(true);
+    const pageSize = 10;
 
-      const response = await api.get('students', {
-        params: {
-          name: searchName,
-          page,
-          pageSize,
-        },
-      });
+    const response = await api.get('plans', {
+      params: {
+        page,
+        pageSize,
+      },
+    });
 
-      const { count, rows } = response.data;
+    const { count, rows } = response.data;
 
-      const data = rows.map(student => ({
-        ...student,
-        age: differenceInYears(new Date(), parseISO(student.dateOfBirth)),
-      }));
-      setStudents(data);
-      setTotalPages(Math.ceil(count / pageSize));
-      setIsLoading(false);
-    },
-    [searchName]
-  );
+    const data = rows.map(plan => ({
+      ...plan,
+      durationFormatted: `${plan.duration} ${
+        plan.duration === 1 ? 'mês' : 'meses'
+      }`,
+      priceFormatted: formatPrice(plan.price),
+    }));
+    setPlans(data);
+    setTotalPages(Math.ceil(count / pageSize));
+    setIsLoading(false);
+  }, []);
 
   useEffect(() => {
-    loadStudents();
-  }, [loadStudents]);
+    loadPlans();
+  }, [loadPlans]);
 
   function deleteWithConfirmation(id) {
-    async function handleDeleteStudent() {
+    async function handleDeletePlan() {
       try {
-        await api.delete(`students/${id}`);
-        setStudents(students.filter(student => student.id !== id));
+        await api.delete(`plans/${id}`);
+        setPlans(plans.filter(plan => plan.id !== id));
       } catch (err) {
-        console.tron.log(err);
+        toast.error('Não foi possível excluír o plano.');
       }
     }
 
     confirmDialog({
       title: 'Exclusão',
-      onConfirm: handleDeleteStudent,
+      onConfirm: handleDeletePlan,
       ownerId: 'container',
       message: (
         <>
-          <p>Tem certeza que deseja excluir o aluno?</p>
-          <p>Atenção, esta ação é irreversível!</p>
+          <p>Tem certeza que deseja excluir o plano?</p>
         </>
       ),
     });
@@ -77,22 +75,11 @@ export default function Student(props) {
   return (
     <Container id="container">
       <Title>
-        <strong>Gerenciando alunos</strong>
+        <strong>Gerenciando planos</strong>
         <div>
-          <button
-            type="button"
-            onClick={() => props.history.push('/students/new')}
-          >
+          <button type="button" onClick={() => history.push('/plans/new')}>
             CADASTRAR
           </button>
-          <InputIcon
-            type="text"
-            placeholder="Buscar aluno"
-            value={searchName}
-            onChange={e => setSearchName(e.target.value)}
-          >
-            <MdSearch />
-          </InputIcon>
         </div>
       </Title>
 
@@ -105,33 +92,31 @@ export default function Student(props) {
 
         <thead>
           <tr>
-            <th>NOME</th>
-            <th>E-MAIL</th>
-            <th align="center">IDADE</th>
+            <th>TÍTULO</th>
+            <th align="center">DURAÇÃO</th>
+            <th align="center">VALOR p/MÊS</th>
           </tr>
         </thead>
 
         <tbody>
-          {students.map(student => (
-            <tr key={student.id}>
-              <td>{student.name}</td>
-              <td>{student.email}</td>
-              <td align="center">{student.age}</td>
+          {plans.map(plan => (
+            <tr key={plan.id}>
+              <td>{plan.title}</td>
+              <td align="center">{plan.durationFormatted}</td>
+              <td align="center">{plan.priceFormatted}</td>
               <td>
                 <div>
                   <EditButton
                     type="button"
                     title="Editar"
-                    onClick={() =>
-                      props.history.push(`/students/${student.id}`)
-                    }
+                    onClick={() => history.push(`/plans/${plan.id}`)}
                   >
                     <MdModeEdit size={20} />
                   </EditButton>
                   <DeleteButton
                     type="button"
                     title="Excluir"
-                    onClick={() => deleteWithConfirmation(student.id)}
+                    onClick={() => deleteWithConfirmation(plan.id)}
                   >
                     <MdDelete size={20} />
                   </DeleteButton>
@@ -140,7 +125,7 @@ export default function Student(props) {
             </tr>
           ))}
 
-          {students.length === 0 && (
+          {plans.length === 0 && (
             <tr>
               <td colSpan="4" align="center">
                 Não foram encontrados registros.
@@ -150,7 +135,7 @@ export default function Student(props) {
         </tbody>
       </StudentTable>
       <Pagination
-        onChange={loadStudents}
+        onChange={loadPlans}
         totalPages={totalPages}
         pageRangeDisplayed={6}
       />

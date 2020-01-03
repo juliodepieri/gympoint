@@ -9,6 +9,7 @@ export default {
   // Input
   inputBackground: '#fff',
   inputBorder: '#ddd',
+  inputDisabled: '#F5F5F5',
 
   // Button
   buttonText: '#fff',

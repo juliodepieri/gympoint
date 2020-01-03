@@ -1,96 +1,135 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Form, Input } from '@rocketseat/unform';
 
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-
-import { RegisterHeader, Content, Container } from './styles';
+import NumberInput from '~/components/NumberInput';
 import api from '~/services/api';
 
-import NumberInput from '~/components/NumberInput';
-import DatePicker from '~/components/DatePicker';
+import { RegisterHeader, Content, Container } from './styles';
 
 const schema = Yup.object().shape({
-  name: Yup.string().required('O nome é obrigatório'),
-  email: Yup.string()
-    .email('Insira um e-mail válido')
-    .required('O e-mail é obrigatório'),
-  dateOfBirth: Yup.string().required('A data de nascimento é obrigatória'),
-  weight: Yup.number().required('O peso é obrigatório'),
-  height: Yup.number().required('A altura é obrigatória'),
+  title: Yup.string().required('O título é obrigatório'),
+  duration: Yup.number().required('A duração (em meses) é obrigatória'),
+  price: Yup.number().required('O preço mensal é obrigatório'),
 });
 
-export default function StudentRegister(props) {
-  const [student, setStudent] = useState();
-  const { params } = props.match;
-  const { id } = params;
+export default function PlanRegister({ match, history }) {
+  const [plan, setPlan] = useState();
+  const { id } = match.params;
 
   useEffect(() => {
-    async function loadStudent() {
+    async function loadPlan() {
       if (id !== 'new') {
-        const response = await api.get(`/students/${id}`);
-        setStudent(response.data);
+        const response = await api.get(`/plans/${id}`);
+        setPlan(response.data);
       }
     }
-    loadStudent();
+    loadPlan();
   }, [id]);
 
-  async function handleSubmit(data, { resetForm }) {
-    console.tron.log('Cadastrar', data);
+  async function handleSubmit(data) {
     try {
       if (id === 'new') {
-        await api.post('/students', data);
-        resetForm();
-        toast.success('Aluno cadastrado com sucesso.');
+        await api.post('/plans', data);
+        toast.success('Plano cadastrado com sucesso.');
       } else {
-        const response = await api.put(`/students/${id}`, data);
-        console.tron.log(response);
-        toast.success('Aluno atualizado com sucesso.');
-        props.history.push('/students');
+        await api.put(`/plans/${id}`, data);
+        toast.success('Plano atualizado com sucesso.');
       }
+      history.push('/plans');
     } catch (err) {
-      console.tron.log(err);
+      toast.error('Não foi possível salvar o plano.');
     }
+  }
+
+  function handleDurationChange(newDuration) {
+    const price = plan ? plan.price : 0;
+    setPlan({
+      ...plan,
+      duration: newDuration,
+      totalPrice: price * newDuration,
+    });
+  }
+
+  function handlePriceChange(newPrice) {
+    const duration = plan ? plan.duration : 0;
+    setPlan({
+      ...plan,
+      price: newPrice,
+      totalPrice: newPrice * duration,
+    });
   }
 
   return (
     <Container>
-      <Form schema={schema} initialData={student} onSubmit={handleSubmit}>
+      <Form schema={schema} initialData={plan} onSubmit={handleSubmit}>
         <RegisterHeader>
           <strong>
-            {id !== 'new' ? 'Edição de aluno' : 'Cadastro de aluno'}
+            {id !== 'new' ? 'Edição de plano' : 'Cadastro de plano'}
           </strong>
 
           <aside>
             <button
               type="button"
               onClick={() => {
-                props.history.push('/students');
+                history.push('/plans');
               }}
             >
               VOLTAR
             </button>
-            <button type="submit">CADASTRAR</button>
+            <button type="submit">SALVAR</button>
           </aside>
         </RegisterHeader>
 
         <Content>
-          <Input name="name" placeholder="John Doe" label="NOME COMPLETO" />
           <Input
-            name="email"
-            type="email"
-            placeholder="exemplo@email.com"
-            label="ENDEREÇO DE E-MAIL"
+            label="TÍTULO DO PLANO"
+            name="title"
+            placeholder="Título do Plano"
           />
-          <div>
-            <DatePicker name="dateOfBirth" label="DATA DE NASCIMENTO" />
 
-            <NumberInput name="weight" label="PESO (em kg)" />
+          <div className="row">
+            <span>
+              <NumberInput
+                label="DURAÇÃO (em meses)"
+                name="duration"
+                onValueChange={handleDurationChange}
+              />
+            </span>
 
-            <NumberInput name="height" label="ALTURA (em metros)" />
+            <span>
+              <NumberInput
+                label="PREÇO MENSAL"
+                name="price"
+                isCurrency
+                onValueChange={handlePriceChange}
+              />
+            </span>
+
+            <span>
+              <NumberInput
+                label="PREÇO TOTAL"
+                name="totalPrice"
+                isCurrency
+                disabled
+              />
+            </span>
           </div>
         </Content>
       </Form>
     </Container>
   );
 }
+
+PlanRegister.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};

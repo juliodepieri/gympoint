@@ -69,7 +69,7 @@ export default function StudentRegister({ match, history }) {
             >
               VOLTAR
             </button>
-            <button type="submit">CADASTRAR</button>
+            <button type="submit">SALVAR</button>
           </aside>
         </RegisterHeader>
 

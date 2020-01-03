@@ -62,7 +62,7 @@ export const Title = styled.div`
   }
 `;
 
-export const StudentTable = styled.table`
+export const EnrollmentTable = styled.table`
   width: 100%;
   background: ${colors.backgroundData};
   border-radius: 4px;

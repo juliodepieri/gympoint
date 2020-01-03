@@ -2,11 +2,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { format, parseISO } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import { MdModeEdit, MdDelete, MdCheckCircle } from 'react-icons/md';
+import { toast } from 'react-toastify';
 import api from '~/services/api';
 
 import {
   Container,
-  StudentTable,
+  EnrollmentTable,
   Title,
   EditButton,
   DeleteButton,
@@ -66,7 +67,7 @@ export default function Enrollment({ history }) {
         await api.delete(`enrollments/${id}`);
         setEnrollments(enrollments.filter(enrollment => enrollment.id !== id));
       } catch (err) {
-        console.tron.log(err);
+        toast.error('Não foi possível excluír a matrícula.');
       }
     }
 
@@ -97,7 +98,7 @@ export default function Enrollment({ history }) {
       </Title>
 
       {isLoading ? <div>Loading ...</div> : ''}
-      <StudentTable>
+      <EnrollmentTable>
         <colgroup>
           <col span="5" />
           <col />
@@ -117,7 +118,7 @@ export default function Enrollment({ history }) {
           {enrollments.map(enrollment => (
             <tr key={enrollment.id}>
               <td>{enrollment.student.name}</td>
-              <td align="center">{enrollment.plan.tittle}</td>
+              <td align="center">{enrollment.plan.title}</td>
               <td align="center">{enrollment.startDateFormatted}</td>
               <td align="center">{enrollment.endDateFormatted}</td>
               <td align="center">
@@ -158,7 +159,7 @@ export default function Enrollment({ history }) {
             </tr>
           )}
         </tbody>
-      </StudentTable>
+      </EnrollmentTable>
       <Pagination
         onChange={loadEnrollments}
         totalPages={totalPages}

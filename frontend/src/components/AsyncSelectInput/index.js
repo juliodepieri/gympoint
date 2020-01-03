@@ -8,7 +8,6 @@ export default function SelectInput({
   name,
   label,
   loadOptions,
-  multiple,
   getOptionValue,
   getOptionLabel,
   ...rest
@@ -22,20 +21,14 @@ export default function SelectInput({
   }, [defaultValue]);
 
   function parseSelectValue(selectRef) {
-    const selectValue = selectRef.props.value;
-
-    if (!multiple) {
-      return selectValue || '';
-    }
-
-    return selectValue ? selectValue.map(option => option.id) : [];
+    return selectRef.props.value;
   }
 
   useEffect(() => {
     registerField({
       name: fieldName,
       ref: ref.current,
-      path: 'select.state.value',
+      path: 'props.value',
       parseValue: parseSelectValue,
       clearValue: selectRef => {
         selectRef.select.clearValue();
@@ -51,14 +44,12 @@ export default function SelectInput({
         aria-label={fieldName}
         id={fieldName}
         cacheOptions
-        defaultOptions
         isClearable
         className="async-select"
         classNamePrefix="async-select"
         value={value}
         onChange={v => setValue(v)}
         loadOptions={inputValue => loadOptions(inputValue)}
-        isMulti={multiple}
         getOptionValue={getOptionValue}
         getOptionLabel={getOptionLabel}
         ref={ref}
@@ -72,7 +63,6 @@ export default function SelectInput({
 SelectInput.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
-  multiple: PropTypes.bool,
   loadOptions: PropTypes.func.isRequired,
   getOptionValue: PropTypes.func,
   getOptionLabel: PropTypes.func,
@@ -81,7 +71,6 @@ SelectInput.propTypes = {
 
 SelectInput.defaultProps = {
   label: null,
-  multiple: false,
   rest: null,
   getOptionValue: option => option.id,
   getOptionLabel: option => option.label,

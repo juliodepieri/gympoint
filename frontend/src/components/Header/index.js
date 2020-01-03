@@ -16,7 +16,7 @@ function Header(props) {
     { name: 'ALUNOS', to: '/students' },
     { name: 'PLANOS', to: '/plans' },
     { name: 'MATRÍCULAS', to: '/enrollments' },
-    { name: 'PEDIDOS DE AUXÍLIO', to: '/orders' },
+    { name: 'PEDIDOS DE AUXÍLIO', to: '/help-orders' },
   ];
 
   function handleSignOut() {
