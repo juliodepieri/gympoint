@@ -2,12 +2,12 @@ import styled, { keyframes } from 'styled-components';
 
 const animatetop = keyframes`
   0% {
-    margin-top: 0%;
+    top: 0%;
     opacity: 0;
   }
 
   100% {
-    margin-top: 15%;
+    top: 50%;
     opacity: 1;
   }
 `;
@@ -26,11 +26,16 @@ export const Background = styled.div`
 
 export const Content = styled.div`
   background-color: #fefefe;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
   width: 50%;
   min-height: 50px;
+  border: 1px solid #888;
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   animation: ${animatetop} 0.4s;
   padding: 0;

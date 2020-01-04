@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import colors from '~/styles/colors';
 
 export const Wrapper = styled.div`
   height: 100%;
-  background: #f5f5f5;
+  background: ${colors.backgroundDefault};
 `;

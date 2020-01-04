@@ -10,21 +10,51 @@ import EnrollmentRegister from '../pages/Enrollment/register';
 import Plan from '../pages/Plan';
 import PlanRegister from '../pages/Plan/register';
 import HelpOrder from '../pages/HelpOrder';
-import HelpOrderRegister from '../pages/HelpOrder/register';
+import FormLayout from '~/pages/_layouts/form';
+import ListLayout from '~/pages/_layouts/list';
 
 export default function Routes() {
   return (
     <Switch>
       <Route path="/" exact component={SignIn} />
 
-      <Route path="/students/:id" component={StudentRegister} isPrivate />
-      <Route path="/students" component={Student} isPrivate />
-      <Route path="/enrollments/:id" component={EnrollmentRegister} isPrivate />
-      <Route path="/enrollments" component={Enrollment} isPrivate />
-      <Route path="/plans/:id" component={PlanRegister} isPrivate />
-      <Route path="/plans" component={Plan} isPrivate />
-      <Route path="/help-orders/:id" component={HelpOrderRegister} isPrivate />
-      <Route path="/help-orders" component={HelpOrder} isPrivate />
+      <Route
+        path="/students/:id"
+        component={StudentRegister}
+        layout={FormLayout}
+        isPrivate
+      />
+      <Route
+        path="/students"
+        component={Student}
+        layout={ListLayout}
+        isPrivate
+      />
+      <Route
+        path="/enrollments/:id"
+        component={EnrollmentRegister}
+        layout={FormLayout}
+        isPrivate
+      />
+      <Route
+        path="/enrollments"
+        component={Enrollment}
+        layout={ListLayout}
+        isPrivate
+      />
+      <Route
+        path="/plans/:id"
+        component={PlanRegister}
+        layout={FormLayout}
+        isPrivate
+      />
+      <Route path="/plans" component={Plan} layout={ListLayout} isPrivate />
+      <Route
+        path="/help-orders"
+        component={HelpOrder}
+        layout={ListLayout}
+        isPrivate
+      />
     </Switch>
   );
 }

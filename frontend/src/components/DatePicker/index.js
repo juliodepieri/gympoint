@@ -7,8 +7,9 @@ import PropTypes from 'prop-types';
 import { useField } from '@rocketseat/unform';
 
 import 'react-datepicker/dist/react-datepicker.css';
+import { Container } from './styles';
 
-export default function DatePicker({ name, label }) {
+export default function DatePicker({ name, label, onChange, disabled }) {
   const ref = useRef(null);
   const { fieldName, registerField, defaultValue, error } = useField(name);
   const [selected, setSelected] = useState(defaultValue);
@@ -31,17 +32,23 @@ export default function DatePicker({ name, label }) {
   }, [ref.current, fieldName]); // eslint-disable-line
 
   return (
-    <>
+    <Container>
       <label htmlFor={fieldName}>{label}</label>
       <ReactDatePicker
         name={fieldName}
         id={fieldName}
         selected={selected}
-        onChange={date => setSelected(date)}
+        onChange={date => {
+          setSelected(date);
+          if (onChange) {
+            onChange(date);
+          }
+        }}
         ref={ref}
         autoComplete="off"
         dateFormat="P"
         locale={pt}
+        disabled={disabled}
         customInput={
           <MaskedInput
             mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
@@ -49,15 +56,19 @@ export default function DatePicker({ name, label }) {
         }
       />
       {error && <span>{error}</span>}
-    </>
+    </Container>
   );
 }
 
 DatePicker.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
+  onChange: PropTypes.func,
+  disabled: PropTypes.bool,
 };
 
 DatePicker.defaultProps = {
   label: null,
+  onChange: null,
+  disabled: false,
 };

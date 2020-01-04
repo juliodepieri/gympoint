@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-
+import { darken } from 'polished';
 import colors from '~/styles/colors';
 
 export const PaginationWrapper = styled.div`
@@ -21,7 +21,7 @@ export const Button = styled.button`
   ${props =>
     props.active &&
     css`
-      background-color: ${colors.darkPrimary};
+      background: ${darken(0.03, colors.primary)};
       color: ${colors.buttonText};
     `};
 `;

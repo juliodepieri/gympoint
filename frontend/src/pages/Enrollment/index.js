@@ -3,15 +3,16 @@ import { format, parseISO } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import { MdModeEdit, MdDelete, MdCheckCircle } from 'react-icons/md';
 import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
+
 import api from '~/services/api';
 
 import {
   Container,
-  EnrollmentTable,
   Title,
   EditButton,
   DeleteButton,
-} from './styles';
+} from '~/pages/_layouts/list/styles';
 
 import { confirmDialog } from '~/components/ConfirmDialog';
 import Pagination from '~/components/Pagination';
@@ -98,7 +99,7 @@ export default function Enrollment({ history }) {
       </Title>
 
       {isLoading ? <div>Loading ...</div> : ''}
-      <EnrollmentTable>
+      <table>
         <colgroup>
           <col span="5" />
           <col />
@@ -159,7 +160,7 @@ export default function Enrollment({ history }) {
             </tr>
           )}
         </tbody>
-      </EnrollmentTable>
+      </table>
       <Pagination
         onChange={loadEnrollments}
         totalPages={totalPages}
@@ -168,3 +169,9 @@ export default function Enrollment({ history }) {
     </Container>
   );
 }
+
+Enrollment.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};

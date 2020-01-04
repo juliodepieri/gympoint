@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { parseISO, differenceInYears } from 'date-fns';
-import { MdModeEdit, MdDelete, MdSearch } from 'react-icons/md';
+import PropTypes from 'prop-types';
+import { MdModeEdit, MdDelete, MdSearch, MdRotateRight } from 'react-icons/md';
 import api from '~/services/api';
 
+import { TitleStudent } from './styles';
 import {
   Container,
-  StudentTable,
-  Title,
   EditButton,
   DeleteButton,
-} from './styles';
+} from '~/pages/_layouts/list/styles';
 
 import { confirmDialog } from '~/components/ConfirmDialog';
 import Pagination from '~/components/Pagination';
 import InputIcon from '~/components/InputIcon';
 
-export default function Student(props) {
+export default function Student({ history }) {
   const [students, setStudents] = useState([]);
   const [searchName, setSearchName] = useState('');
   const [totalPages, setTotalPages] = useState(0);
@@ -68,21 +68,18 @@ export default function Student(props) {
       message: (
         <>
           <p>Tem certeza que deseja excluir o aluno?</p>
-          <p>Atenção, esta ação é irreversível!</p>
+          <p>Atenção, esta ação não pode ser desfeita!</p>
         </>
       ),
     });
   }
 
   return (
-    <Container id="container">
-      <Title>
+    <Container>
+      <TitleStudent>
         <strong>Gerenciando alunos</strong>
         <div>
-          <button
-            type="button"
-            onClick={() => props.history.push('/students/new')}
-          >
+          <button type="button" onClick={() => history.push('/students/new')}>
             CADASTRAR
           </button>
           <InputIcon
@@ -94,10 +91,10 @@ export default function Student(props) {
             <MdSearch />
           </InputIcon>
         </div>
-      </Title>
+      </TitleStudent>
 
-      {isLoading ? <div>Loading ...</div> : ''}
-      <StudentTable>
+      {isLoading ? <MdRotateRight /> : ''}
+      <table>
         <colgroup>
           <col span="3" />
           <col />
@@ -122,9 +119,7 @@ export default function Student(props) {
                   <EditButton
                     type="button"
                     title="Editar"
-                    onClick={() =>
-                      props.history.push(`/students/${student.id}`)
-                    }
+                    onClick={() => history.push(`/students/${student.id}`)}
                   >
                     <MdModeEdit size={20} />
                   </EditButton>
@@ -148,7 +143,7 @@ export default function Student(props) {
             </tr>
           )}
         </tbody>
-      </StudentTable>
+      </table>
       <Pagination
         onChange={loadStudents}
         totalPages={totalPages}
@@ -157,3 +152,9 @@ export default function Student(props) {
     </Container>
   );
 }
+
+Student.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};

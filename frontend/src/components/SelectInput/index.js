@@ -10,6 +10,7 @@ export default function SelectInput({
   options,
   getOptionValue,
   getOptionLabel,
+  onChange,
   ...rest
 }) {
   const ref = useRef(null);
@@ -50,7 +51,12 @@ export default function SelectInput({
         getOptionValue={getOptionValue}
         getOptionLabel={getOptionLabel}
         value={value}
-        onChange={v => setValue(v)}
+        onChange={v => {
+          setValue(v);
+          if (onChange) {
+            onChange(v);
+          }
+        }}
         {...rest}
       />
 
@@ -66,6 +72,7 @@ SelectInput.propTypes = {
   getOptionValue: PropTypes.func,
   getOptionLabel: PropTypes.func,
   rest: PropTypes.element,
+  onChange: PropTypes.func,
 };
 
 SelectInput.defaultProps = {
@@ -73,4 +80,5 @@ SelectInput.defaultProps = {
   rest: null,
   getOptionValue: option => option.id,
   getOptionLabel: option => option.label,
+  onChange: null,
 };

@@ -9,6 +9,7 @@ import { store } from '~/store';
 
 export default function RouteWrapper({
   component: Component,
+  layout,
   isPrivate,
   ...rest
 }) {
@@ -22,7 +23,7 @@ export default function RouteWrapper({
     return <Redirect to="/students" />;
   }
 
-  const Layout = signed ? DefaultLayout : AuthLayout;
+  const Layout = signed ? layout : AuthLayout;
 
   return (
     <Route
@@ -38,10 +39,12 @@ export default function RouteWrapper({
 
 RouteWrapper.propTypes = {
   isPrivate: PropTypes.bool,
+  layout: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
   component: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
     .isRequired,
 };
 
 RouteWrapper.defaultProps = {
+  layout: DefaultLayout,
   isPrivate: false,
 };

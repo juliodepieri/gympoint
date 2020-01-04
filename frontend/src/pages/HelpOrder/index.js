@@ -2,11 +2,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { MdQuestionAnswer } from 'react-icons/md';
 import api from '~/services/api';
 
-import { Container, StudentTable, Title } from './styles';
+import { ContainerHelpOrder, AnswerButton } from './styles';
+import { Title } from '~/pages/_layouts/list/styles';
 
 import Pagination from '~/components/Pagination';
+import { showAnswerModal } from './AnswerModal';
 
-export default function HelpOrder({ history }) {
+export default function HelpOrder() {
   const [helpOrders, setHelpOrders] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,14 +35,26 @@ export default function HelpOrder({ history }) {
     loadHelpOrders();
   }, [loadHelpOrders]);
 
+  function handleAnswerOrder(id) {
+    setHelpOrders(helpOrders.filter(helpOrder => helpOrder.id !== id));
+  }
+
+  function handleAnswer(helpOrder) {
+    showAnswerModal({
+      onAnswer: handleAnswerOrder,
+      ownerId: 'container',
+      helpOrder,
+    });
+  }
+
   return (
-    <Container id="container">
+    <ContainerHelpOrder id="container">
       <Title>
         <strong>Pedidos de auxílio</strong>
       </Title>
 
       {isLoading ? <div>Loading ...</div> : ''}
-      <StudentTable>
+      <table>
         <colgroup>
           <col span="1" />
           <col />
@@ -58,13 +72,13 @@ export default function HelpOrder({ history }) {
               <td>{helpOrder.student.name}</td>
               <td>
                 <div>
-                  <button
+                  <AnswerButton
                     type="button"
-                    title="Editar"
-                    onClick={() => history.push(`/help-orders/${helpOrder.id}`)}
+                    title="Responder"
+                    onClick={() => handleAnswer(helpOrder)}
                   >
                     <MdQuestionAnswer size={20} />
-                  </button>
+                  </AnswerButton>
                 </div>
               </td>
             </tr>
@@ -78,12 +92,12 @@ export default function HelpOrder({ history }) {
             </tr>
           )}
         </tbody>
-      </StudentTable>
+      </table>
       <Pagination
         onChange={loadHelpOrders}
         totalPages={totalPages}
         pageRangeDisplayed={6}
       />
-    </Container>
+    </ContainerHelpOrder>
   );
 }

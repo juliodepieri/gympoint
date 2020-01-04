@@ -7,7 +7,8 @@ import { toast } from 'react-toastify';
 import NumberInput from '~/components/NumberInput';
 import api from '~/services/api';
 
-import { RegisterHeader, Content, Container } from './styles';
+import { FormHeader } from '~/pages/_layouts/form/styles';
+import { Content } from './styles';
 
 const schema = Yup.object().shape({
   title: Yup.string().required('O título é obrigatório'),
@@ -63,63 +64,61 @@ export default function PlanRegister({ match, history }) {
   }
 
   return (
-    <Container>
-      <Form schema={schema} initialData={plan} onSubmit={handleSubmit}>
-        <RegisterHeader>
-          <strong>
-            {id !== 'new' ? 'Edição de plano' : 'Cadastro de plano'}
-          </strong>
+    <Form schema={schema} initialData={plan} onSubmit={handleSubmit}>
+      <FormHeader>
+        <strong>
+          {id !== 'new' ? 'Edição de plano' : 'Cadastro de plano'}
+        </strong>
 
-          <aside>
-            <button
-              type="button"
-              onClick={() => {
-                history.push('/plans');
-              }}
-            >
-              VOLTAR
-            </button>
-            <button type="submit">SALVAR</button>
-          </aside>
-        </RegisterHeader>
+        <aside>
+          <button
+            type="button"
+            onClick={() => {
+              history.push('/plans');
+            }}
+          >
+            VOLTAR
+          </button>
+          <button type="submit">SALVAR</button>
+        </aside>
+      </FormHeader>
 
-        <Content>
-          <Input
-            label="TÍTULO DO PLANO"
-            name="title"
-            placeholder="Título do Plano"
-          />
+      <Content>
+        <Input
+          label="TÍTULO DO PLANO"
+          name="title"
+          placeholder="Título do Plano"
+        />
 
-          <div className="row">
-            <span>
-              <NumberInput
-                label="DURAÇÃO (em meses)"
-                name="duration"
-                onValueChange={handleDurationChange}
-              />
-            </span>
+        <div className="row">
+          <span>
+            <NumberInput
+              label="DURAÇÃO (em meses)"
+              name="duration"
+              onValueChange={handleDurationChange}
+            />
+          </span>
 
-            <span>
-              <NumberInput
-                label="PREÇO MENSAL"
-                name="price"
-                isCurrency
-                onValueChange={handlePriceChange}
-              />
-            </span>
+          <span>
+            <NumberInput
+              label="PREÇO MENSAL"
+              name="price"
+              isCurrency
+              onValueChange={handlePriceChange}
+            />
+          </span>
 
-            <span>
-              <NumberInput
-                label="PREÇO TOTAL"
-                name="totalPrice"
-                isCurrency
-                disabled
-              />
-            </span>
-          </div>
-        </Content>
-      </Form>
-    </Container>
+          <span>
+            <NumberInput
+              label="PREÇO TOTAL"
+              name="totalPrice"
+              isCurrency
+              disabled
+            />
+          </span>
+        </div>
+      </Content>
+    </Form>
   );
 }
 

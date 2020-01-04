@@ -4,9 +4,11 @@ import { toast } from 'react-toastify';
 
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
+import { addMonths, parseISO } from 'date-fns';
 import api from '~/services/api';
 
-import { RegisterHeader, Content, Container } from './styles';
+import { FormHeader } from '~/pages/_layouts/form/styles';
+import { Content } from './styles';
 import NumberInput from '~/components/NumberInput';
 import DatePicker from '~/components/DatePicker';
 import AsyncSelectInput from '~/components/AsyncSelectInput';
@@ -40,7 +42,13 @@ export default function EnrollmentRegister({ match, history }) {
     async function loadEnrollment() {
       if (id !== 'new') {
         const response = await api.get(`/enrollments/${id}`);
-        setEnrollment(response.data);
+        const { data } = response;
+
+        setEnrollment({
+          ...data,
+          end_date: parseISO(data.end_date),
+          price: data.plan.duration * data.plan.price,
+        });
       }
     }
 
@@ -64,7 +72,7 @@ export default function EnrollmentRegister({ match, history }) {
       }
       history.push('/enrollments');
     } catch (err) {
-      console.tron.log(err);
+      toast.error('Não foi possível salvar os dados da Matrícula.');
     }
   }
 
@@ -80,67 +88,95 @@ export default function EnrollmentRegister({ match, history }) {
     return students;
   };
 
+  function handleStartDateChange(newStartDate) {
+    setEnrollment({
+      ...enrollment,
+      start_date: newStartDate,
+      end_date:
+        enrollment && enrollment.plan
+          ? addMonths(newStartDate, enrollment.plan.duration)
+          : undefined,
+    });
+  }
+
+  function handlePlanChange(newPlan) {
+    const enrollmentPrice = newPlan.price * newPlan.duration;
+    setEnrollment({
+      ...enrollment,
+      plan: newPlan,
+      price: newPlan ? enrollmentPrice : 0,
+      end_date:
+        enrollment && parseISO(enrollment.start_date) && newPlan
+          ? addMonths(parseISO(enrollment.start_date), newPlan.duration)
+          : undefined,
+    });
+  }
+
   return (
-    <Container>
-      <Form schema={schema} initialData={enrollment} onSubmit={handleSubmit}>
-        <RegisterHeader>
-          <strong>
-            {id !== 'new' ? 'Edição de matrícula' : 'Cadastro de matrícula'}
-          </strong>
+    <Form schema={schema} initialData={enrollment} onSubmit={handleSubmit}>
+      <FormHeader>
+        <strong>
+          {id !== 'new' ? 'Edição de matrícula' : 'Cadastro de matrícula'}
+        </strong>
 
-          <aside>
-            <button
-              type="button"
-              onClick={() => {
-                history.push('/enrollments');
-              }}
-            >
-              VOLTAR
-            </button>
-            <button type="submit">SALVAR</button>
-          </aside>
-        </RegisterHeader>
+        <aside>
+          <button
+            type="button"
+            onClick={() => {
+              history.push('/enrollments');
+            }}
+          >
+            VOLTAR
+          </button>
+          <button type="submit">SALVAR</button>
+        </aside>
+      </FormHeader>
 
-        <Content>
-          <AsyncSelectInput
-            name="student"
-            loadOptions={loadOptions}
-            label="ALUNO"
-            getOptionValue={option => option.id}
-            getOptionLabel={option => option.name}
-            placeholder="Buscar Aluno"
-          />
-          <div className="row">
-            <span>
-              <SelectInput
-                name="plan"
-                options={plans}
-                label="PLANO"
-                placeholder="Selecione o Plano"
-                getOptionLabel={option => option.title}
-              />
-            </span>
+      <Content>
+        <AsyncSelectInput
+          name="student"
+          loadOptions={loadOptions}
+          label="ALUNO"
+          getOptionValue={option => option.id}
+          getOptionLabel={option => option.name}
+          placeholder="Buscar Aluno"
+        />
+        <div className="row">
+          <span>
+            <SelectInput
+              name="plan"
+              options={plans}
+              label="PLANO"
+              placeholder="Selecione o Plano"
+              getOptionLabel={option => option.title}
+              onChange={handlePlanChange}
+            />
+          </span>
 
-            <span>
-              <DatePicker label="DATA DE INÍCIO" name="start_date" />
-            </span>
+          <span>
+            <DatePicker
+              label="DATA DE INÍCIO"
+              name="start_date"
+              onChange={handleStartDateChange}
+            />
+          </span>
 
-            <span>
-              <DatePicker label="DATA DE TÉRMINO" name="end_date" />
-            </span>
+          <span>
+            <DatePicker label="DATA DE TÉRMINO" name="end_date" disabled />
+          </span>
 
-            <span>
-              <NumberInput
-                label="VALOR FINAL"
-                name="totalPrice"
-                disabled
-                defaultValue={0}
-              />
-            </span>
-          </div>
-        </Content>
-      </Form>
-    </Container>
+          <span>
+            <NumberInput
+              label="VALOR FINAL"
+              name="price"
+              disabled
+              defaultValue={0}
+              isCurrency
+            />
+          </span>
+        </div>
+      </Content>
+    </Form>
   );
 }
 

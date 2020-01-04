@@ -77,5 +77,13 @@ export const Content = styled.div`
         opacity: 1;
       }
     }
+
+    input + span {
+      display: flex;
+      color: #de3b3b;
+      margin: 0 0 10px;
+      font-weight: bold;
+      margin-top: 5px;
+    }
   }
 `;

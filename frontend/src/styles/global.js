@@ -45,12 +45,4 @@ export default createGlobalStyle`
     cursor: pointer;
   }
 
-  input + span {
-    display: flex;
-    color: #DE3B3B;
-    margin: 0 0 10px;
-    font-weight: bold;
-    margin-top: 5px;
-  }
-
 `;

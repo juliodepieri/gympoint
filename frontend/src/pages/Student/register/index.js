@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input } from '@rocketseat/unform';
 
+import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 
-import { RegisterHeader, Content, Container } from './styles';
+import { FormHeader } from '~/pages/_layouts/form/styles';
+import { Content } from './styles';
 import api from '~/services/api';
 
 import NumberInput from '~/components/NumberInput';
@@ -53,43 +55,52 @@ export default function StudentRegister({ match, history }) {
   }
 
   return (
-    <Container>
-      <Form schema={schema} initialData={student} onSubmit={handleSubmit}>
-        <RegisterHeader>
-          <strong>
-            {id !== 'new' ? 'Edição de aluno' : 'Cadastro de aluno'}
-          </strong>
+    <Form schema={schema} initialData={student} onSubmit={handleSubmit}>
+      <FormHeader>
+        <strong>
+          {id !== 'new' ? 'Edição de aluno' : 'Cadastro de aluno'}
+        </strong>
 
-          <aside>
-            <button
-              type="button"
-              onClick={() => {
-                history.push('/students');
-              }}
-            >
-              VOLTAR
-            </button>
-            <button type="submit">SALVAR</button>
-          </aside>
-        </RegisterHeader>
+        <aside>
+          <button
+            type="button"
+            onClick={() => {
+              history.push('/students');
+            }}
+          >
+            VOLTAR
+          </button>
+          <button type="submit">SALVAR</button>
+        </aside>
+      </FormHeader>
 
-        <Content>
-          <Input name="name" placeholder="John Doe" label="NOME COMPLETO" />
-          <Input
-            name="email"
-            type="email"
-            placeholder="exemplo@email.com"
-            label="ENDEREÇO DE E-MAIL"
-          />
-          <div>
-            <DatePicker name="dateOfBirth" label="DATA DE NASCIMENTO" />
+      <Content>
+        <Input name="name" placeholder="John Doe" label="NOME COMPLETO" />
+        <Input
+          name="email"
+          type="email"
+          placeholder="exemplo@email.com"
+          label="ENDEREÇO DE E-MAIL"
+        />
+        <div>
+          <DatePicker name="dateOfBirth" label="DATA DE NASCIMENTO" />
 
-            <NumberInput name="weight" label="PESO (em kg)" />
+          <NumberInput name="weight" label="PESO (em kg)" />
 
-            <NumberInput name="height" label="ALTURA (em metros)" />
-          </div>
-        </Content>
-      </Form>
-    </Container>
+          <NumberInput name="height" label="ALTURA (em metros)" />
+        </div>
+      </Content>
+    </Form>
   );
 }
+
+StudentRegister.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};

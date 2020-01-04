@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { MdModeEdit, MdDelete } from 'react-icons/md';
 import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 
 import api from '~/services/api';
 import { formatPrice } from '~/util/format';
 
 import {
   Container,
-  StudentTable,
   Title,
   EditButton,
   DeleteButton,
-} from './styles';
+} from '~/pages/_layouts/list/styles';
 
 import { confirmDialog } from '~/components/ConfirmDialog';
 import Pagination from '~/components/Pagination';
@@ -84,7 +84,7 @@ export default function Plan({ history }) {
       </Title>
 
       {isLoading ? <div>Loading ...</div> : ''}
-      <StudentTable>
+      <table>
         <colgroup>
           <col span="3" />
           <col />
@@ -133,7 +133,7 @@ export default function Plan({ history }) {
             </tr>
           )}
         </tbody>
-      </StudentTable>
+      </table>
       <Pagination
         onChange={loadPlans}
         totalPages={totalPages}
@@ -142,3 +142,9 @@ export default function Plan({ history }) {
     </Container>
   );
 }
+
+Plan.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};

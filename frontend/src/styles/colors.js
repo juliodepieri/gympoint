@@ -1,15 +1,13 @@
-import { darken } from 'polished';
-
 export default {
   primary: '#ee4d64',
-  darkPrimary: darken(0.08, '#ee4d64'),
   red: '#de3b3b',
   blue: '#4d85ee',
+  grey: '#ddd',
 
   // Input
   inputBackground: '#fff',
   inputBorder: '#ddd',
-  inputDisabled: '#F5F5F5',
+  inputDisabled: '#f5f5f5',
 
   // Button
   buttonText: '#fff',
@@ -18,7 +16,7 @@ export default {
   text: '#666',
   textLabel: '#444',
   textDisable: '#999',
-  warning: '#fc3903',
+  warning: '#de3b3b',
 
   // Table
   tableLine: '#eee',
