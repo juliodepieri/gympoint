@@ -5,11 +5,12 @@ import { withNavigationFocus } from 'react-navigation';
 import { Alert } from 'react-native';
 
 import api from '~/services/api';
+import Header from '~/components/Header';
+import Button from '~/components/Button';
 
-import Background from '~/components/Background';
 import Checkin from '~/components/Checkin';
 
-import { Container, Title, List, Loading } from './styles';
+import { Container, Content, List, Loading } from './styles';
 
 function Dashboard() {
   const student = useSelector(state => state.auth.student);
@@ -26,13 +27,14 @@ function Dashboard() {
         },
       });
 
-      const newData = response.data.rows.map((checkin, index) => ({
+      const { rows, count } = response.data;
+
+      const newData = rows.map((checkin, index) => ({
         ...checkin,
-        title: `Check-in #${(page - 1) * 10 + (index + 1)} `,
+        title: `Check-in #${count - ((page - 1) * 10 + index)} `,
       }));
 
-      const data = page >= 2 ? [...checkins, ...newData] : newData;
-      setCheckins(data);
+      setCheckins(c => (page >= 2 ? [...c, ...newData] : newData));
     }
 
     try {
@@ -44,9 +46,9 @@ function Dashboard() {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [checkins, page, student.id]);
+  }, [page, student.id]);
 
-  async function loadMoreCheckins() {
+  function loadMore() {
     setPage(page + 1);
   }
 
@@ -55,32 +57,48 @@ function Dashboard() {
     setPage(1);
   }
 
+  async function handleNewCheckin() {
+    try {
+      setLoading(true);
+      await api.post(`students/${student.id}/checkins`, {});
+      refreshCheckins();
+    } catch (err) {
+      Alert.alert(
+        'Falha',
+        `Não foi possível incluir o check-in: ${err.response.data.error}`
+      );
+    }
+  }
+
   return (
-    <Background>
-      <Container>
-        <Title>Checkins</Title>
+    <Container>
+      <Header />
+      <Content>
+        <Button onPress={handleNewCheckin} loading={loading}>
+          Novo check-in
+        </Button>
         {loading ? (
           <Loading />
         ) : (
           <List
             data={checkins}
             keyExtractor={item => String(item.id)}
-            onEndReachedThreshold={0.2}
-            onEndReached={loadMoreCheckins}
+            onEndReached={loadMore}
+            onEndReachedThreshold={0.1}
             onRefresh={refreshCheckins}
             refreshing={refreshing}
             renderItem={({ item }) => <Checkin data={item} />}
           />
         )}
-      </Container>
-    </Background>
+      </Content>
+    </Container>
   );
 }
 
 Dashboard.navigationOptions = {
-  tabBarLabel: 'Check-in',
+  tabBarLabel: 'Check-ins',
   tabBarIcon: ({ tintColor }) => (
-    <Icon name="event" size={20} color={tintColor} />
+    <Icon name="edit-location" size={20} color={tintColor} />
   ),
 };
 

@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import logo from '~/assets/logo.png';
 
-import Background from '~/components/Background';
 import { signInRequest } from '~/store/modules/auth/actions';
 
 import { Container, Form, FormInput, SubmitButton } from './styles';
@@ -21,28 +20,26 @@ export default function SignIn() {
   }
 
   return (
-    <Background>
-      <Container>
-        <Image source={logo} />
+    <Container>
+      <Image source={logo} />
 
-        <Form>
-          <FormInput
-            icon="account_circle"
-            keyboardType="phone-pad"
-            autoCorrect={false}
-            autoCapitalize="none"
-            placeholder="Informe seu ID de cadastro"
-            returnKeyType="next"
-            onSubmitEditing={handleSubmit}
-            value={id}
-            onChangeText={setId}
-          />
+      <Form>
+        <FormInput
+          icon="account-circle"
+          keyboardType="phone-pad"
+          autoCorrect={false}
+          autoCapitalize="none"
+          placeholder="Informe seu ID de cadastro"
+          returnKeyType="next"
+          onSubmitEditing={handleSubmit}
+          value={id}
+          onChangeText={setId}
+        />
 
-          <SubmitButton loading={loading} onPress={handleSubmit}>
-            Entrar no sistema
-          </SubmitButton>
-        </Form>
-      </Container>
-    </Background>
+        <SubmitButton loading={loading} onPress={handleSubmit}>
+          Entrar no sistema
+        </SubmitButton>
+      </Form>
+    </Container>
   );
 }
