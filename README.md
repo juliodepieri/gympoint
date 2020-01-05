@@ -36,6 +36,8 @@ $> docker-compose up -d
 
 ### Back-end
 
+Na pasta backend deve ser criado um arquivo .env de acordo com o modelo .env.example. 
+
 Instalar as dependências do projeto
 
 ```
@@ -46,6 +48,24 @@ Iniciar back-end
 
 ```
 $> yarn dev
+```
+
+Para criar as tabelas
+
+```
+$> yarn sequelize db:migrate
+```
+
+Dados iniciais para teste
+
+```
+$> yarn sequelize db:seed:all
+```
+
+Iniciar o gerenciador de filas
+
+```
+$> yarn queue
 ```
 
 ### Front-end
