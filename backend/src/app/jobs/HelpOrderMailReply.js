@@ -13,7 +13,7 @@ class HelpOrderMailReply {
 
     await Mail.sendMail({
       to: `${student.name} <${student.email}>`,
-      subject: 'Help Order Reply',
+      subject: 'Pedido de auxílio respondido',
       template: 'helpOrderReply',
       context: {
         student: student.name,

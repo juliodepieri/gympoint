@@ -11,7 +11,7 @@ class StudentController {
       limit: pageLimit,
       offset: (page - 1) * pageLimit,
       order: ['name'],
-      attributes: ['id', 'name', 'email', 'dateOfBirth', 'weight', 'height'],
+      attributes: ['id', 'name', 'email', 'date_of_birth', 'weight', 'height'],
     };
 
     if (name) {
@@ -36,7 +36,7 @@ class StudentController {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
       email: Yup.string().required(),
-      dateOfBirth: Yup.date().required(),
+      date_of_birth: Yup.date().required(),
       weight: Yup.number().required(),
       height: Yup.number().required(),
     });
@@ -53,14 +53,14 @@ class StudentController {
       return res.status(400).json({ error: 'Student already exists' });
     }
 
-    const { name, email, birthOfDate, weight, height } = await Student.create(
+    const { name, email, birth_of_date, weight, height } = await Student.create(
       req.body
     );
 
     return res.json({
       name,
       email,
-      birthOfDate,
+      birth_of_date,
       weight,
       height,
     });
@@ -70,7 +70,7 @@ class StudentController {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
       email: Yup.string().required(),
-      dateOfBirth: Yup.date().required(),
+      date_of_birth: Yup.date().required(),
       weight: Yup.number().required(),
       height: Yup.number().required(),
     });
@@ -91,7 +91,7 @@ class StudentController {
       }
     }
 
-    const { id, name, dateOfBirth, weight, height } = await student.update(
+    const { id, name, date_of_birth, weight, height } = await student.update(
       req.body
     );
 
@@ -99,7 +99,7 @@ class StudentController {
       id,
       name,
       email,
-      dateOfBirth,
+      date_of_birth,
       weight,
       height,
     });

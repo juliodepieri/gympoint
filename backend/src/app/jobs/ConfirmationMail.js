@@ -13,18 +13,14 @@ class ConfirmationMail {
 
     await Mail.sendMail({
       to: `${student.name} <${student.email}>`,
-      subject: 'Enrollment Details',
+      subject: 'Detalhes da matrícula',
       template: 'enrollmentConfirmation',
       context: {
         student: student.name,
         plan: plan.title,
-        endDate: format(
-          parseISO(enrollment.end_date),
-          "'dia' dd 'de' MMMM', às' H:mm'h'",
-          {
-            locale: pt,
-          }
-        ),
+        endDate: format(parseISO(enrollment.end_date), "'dia' dd 'de' MMMM'", {
+          locale: pt,
+        }),
       },
     });
   }

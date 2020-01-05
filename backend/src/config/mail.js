@@ -7,6 +7,6 @@ export default {
     pass: process.env.MAIL_PASS,
   },
   default: {
-    from: 'GymPoint Team <noreply@gympoint.com>',
+    from: 'Gympoint Team <noreply@gympoint.com>',
   },
 };

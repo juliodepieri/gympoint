@@ -1,11 +1,10 @@
-import { parseISO, addMonths } from 'date-fns';
 import * as Yup from 'yup';
+import { parseISO, addMonths } from 'date-fns';
+
 import Enrollment from '../models/Enrollment';
 import Plan from '../models/Plan';
-
 import Student from '../models/Student';
 import Queue from '../../lib/Queue';
-
 import ConfirmationJob from '../jobs/ConfirmationMail';
 
 class EnrollmentController {

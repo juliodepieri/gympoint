@@ -25,5 +25,5 @@ module.exports = {
     ]);
   },
 
-  down: () => {},
+  down: queryInterface => queryInterface.bulkDelete('plans', null, {}),
 };

@@ -1,5 +1,5 @@
 import Sequelize, { Model } from 'sequelize';
-import {isBefore, isAfter} from 'date-fns';
+import { parseISO, isBefore, isAfter } from 'date-fns';
 
 class Enrollment extends Model {
   static init(sequelize) {
@@ -15,16 +15,14 @@ class Enrollment extends Model {
           ]),
           get() {
             return (
-              isBefore(this.get('start_date'), new Date()) &&
-              isAfter(this.get('end_date'), new Date())
+              isBefore(parseISO(this.get('start_date')), new Date()) &&
+              isAfter(parseISO(this.get('end_date')), new Date())
             );
           },
         },
       },
       {
         sequelize,
-        freezeTableName: true,
-        modelName: 'enrollment',
       }
     );
     return this;
