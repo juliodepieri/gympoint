@@ -15,7 +15,7 @@ class ChekinController {
 
     if (count >= 5) {
       return res.status(400).json({
-        error: 'limit of 5 check-in within 7 days reached',
+        error: 'limite de 5 check-ins em 7 dias alcançado',
       });
     }
 
