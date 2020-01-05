@@ -16,13 +16,3 @@ export const List = styled.FlatList.attrs({
   padding: 20px 0;
   flex: 1;
 `;
-
-export const Loading = styled.ActivityIndicator.attrs({
-  color: '#ee4e62',
-  size: 50,
-})`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-`;

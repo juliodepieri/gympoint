@@ -27,14 +27,9 @@ function ListHelpOrder({ isFocused, navigation }) {
         },
       });
 
-      const { rows, count } = response.data;
-
-      const newData = rows.map((order, index) => ({
-        ...order,
-        title: `Check-in #${count - ((page - 1) * 10 + index)} `,
-      }));
-
-      setHelpOrders(c => (page >= 2 ? [...c, ...newData] : newData));
+      const { rows } = response.data;
+      setHelpOrders(c => (page >= 2 ? [...c, ...rows] : rows));
+      setLoading(false);
     }
 
     try {
@@ -42,9 +37,9 @@ function ListHelpOrder({ isFocused, navigation }) {
       setLoading(true);
       loadHelpOrders();
     } catch (err) {
+      setLoading(false);
       Alert.alert('Falha', 'Não foi possível carregar a lista de check-ins');
     } finally {
-      setLoading(false);
       setRefreshing(false);
     }
   }, [isFocused, page, student.id]);
@@ -70,28 +65,23 @@ function ListHelpOrder({ isFocused, navigation }) {
         <Button onPress={handleNewHelpOrder} loading={loading}>
           Novo pedido de auxílio
         </Button>
-
-        {loading ? (
-          <Loading />
-        ) : (
-          <List
-            data={helpOrders}
-            keyExtractor={item => String(item.id)}
-            onEndReached={loadMore}
-            onEndReachedThreshold={0.1}
-            onRefresh={refreshHelpOrders}
-            refreshing={refreshing}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('ShowHelpOrder', { helpOrder: item })
-                }
-              >
-                <HelpOrder data={item} />
-              </TouchableOpacity>
-            )}
-          />
-        )}
+        <List
+          data={helpOrders}
+          keyExtractor={item => String(item.id)}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.1}
+          onRefresh={refreshHelpOrders}
+          refreshing={refreshing}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('ShowHelpOrder', { helpOrder: item })
+              }
+            >
+              <HelpOrder data={item} />
+            </TouchableOpacity>
+          )}
+        />
       </Content>
     </Container>
   );

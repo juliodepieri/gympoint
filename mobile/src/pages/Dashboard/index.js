@@ -36,15 +36,18 @@ function Dashboard() {
       }));
 
       setCheckins(c => (page >= 2 ? [...c, ...newData] : newData));
+      setLoading(false);
     }
 
     try {
+      setRefreshing(true);
       setLoading(true);
       loadCheckins();
     } catch (err) {
+      setLoading(false);
       Alert.alert('Falha', 'Não foi possível carregar a lista de check-ins');
     } finally {
-      setLoading(false);
+      console.tron.log('finally');
       setRefreshing(false);
     }
   }, [page, student.id]);
@@ -54,7 +57,6 @@ function Dashboard() {
   }
 
   async function refreshCheckins() {
-    setRefreshing(true);
     setPage(1);
   }
 
@@ -80,19 +82,16 @@ function Dashboard() {
         <Button onPress={handleNewCheckin} loading={loading}>
           Novo check-in
         </Button>
-        {loading ? (
-          <Loading />
-        ) : (
-          <List
-            data={checkins}
-            keyExtractor={item => String(item.id)}
-            onEndReached={loadMore}
-            onEndReachedThreshold={0.1}
-            onRefresh={refreshCheckins}
-            refreshing={refreshing}
-            renderItem={({ item }) => <Checkin data={item} />}
-          />
-        )}
+        {/* {loading && <Loading />} */}
+        <List
+          data={checkins}
+          keyExtractor={item => String(item.id)}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.1}
+          onRefresh={refreshCheckins}
+          refreshing={refreshing}
+          renderItem={({ item }) => <Checkin data={item} />}
+        />
       </Content>
     </Container>
   );

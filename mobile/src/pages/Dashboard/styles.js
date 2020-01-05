@@ -2,6 +2,7 @@ import styled from 'styled-components/native';
 
 export const Container = styled.SafeAreaView`
   background: #f2f2f2;
+  height: 100%;
 `;
 
 export const Content = styled.View`
@@ -12,14 +13,4 @@ export const List = styled.FlatList.attrs({
   showsVerticalScrollIndicator: false,
 })`
   padding: 20px 0;
-`;
-
-export const Loading = styled.ActivityIndicator.attrs({
-  color: '#ee4e62',
-  size: 50,
-})`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
 `;
