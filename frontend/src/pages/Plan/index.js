@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { MdModeEdit, MdDelete } from 'react-icons/md';
-import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 
 import api from '~/services/api';
 import { formatPrice } from '~/util/format';
@@ -67,6 +67,9 @@ export default function Plan({ history }) {
       message: (
         <>
           <p>Tem certeza que deseja excluir o plano?</p>
+          <p className="text-warning">
+            Atenção, esta ação não pode ser desfeita!
+          </p>
         </>
       ),
     });

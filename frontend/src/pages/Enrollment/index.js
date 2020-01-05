@@ -1,19 +1,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
+
+import { MdModeEdit, MdDelete, MdCheckCircle } from 'react-icons/md';
+import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 import { format, parseISO } from 'date-fns';
 import pt from 'date-fns/locale/pt';
-import { MdModeEdit, MdDelete, MdCheckCircle } from 'react-icons/md';
-import { toast } from 'react-toastify';
-import PropTypes from 'prop-types';
 
 import api from '~/services/api';
-
 import {
   Container,
   Title,
   EditButton,
   DeleteButton,
 } from '~/pages/_layouts/list/styles';
-
 import { confirmDialog } from '~/components/ConfirmDialog';
 import Pagination from '~/components/Pagination';
 
@@ -79,6 +78,9 @@ export default function Enrollment({ history }) {
       message: (
         <>
           <p>Tem certeza que deseja excluir a matrícula?</p>
+          <p className="text-warning">
+            Atenção, esta ação não pode ser desfeita!
+          </p>
         </>
       ),
     });

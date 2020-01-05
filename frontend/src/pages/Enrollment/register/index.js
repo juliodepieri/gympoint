@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Form } from '@rocketseat/unform';
-import { toast } from 'react-toastify';
 
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
+import { Form } from '@rocketseat/unform';
 import * as Yup from 'yup';
 import { addMonths, parseISO } from 'date-fns';
-import api from '~/services/api';
 
+import api from '~/services/api';
 import { FormHeader } from '~/pages/_layouts/form/styles';
 import { Content } from './styles';
 import NumberInput from '~/components/NumberInput';
@@ -15,12 +15,17 @@ import AsyncSelectInput from '~/components/AsyncSelectInput';
 import SelectInput from '~/components/SelectInput';
 
 const schema = Yup.object().shape({
-  student: Yup.object().shape({
-    id: Yup.number().required('O aluno é obrigatório'),
-  }),
-  plan: Yup.object().shape({
-    id: Yup.number().required('O plano é obrigatório'),
-  }),
+  student: Yup.object({
+    id: Yup.number(),
+  })
+    .nullable()
+    .required('O aluno é obrigatório'),
+  plan: Yup.object()
+    .shape({
+      id: Yup.number(),
+    })
+    .nullable()
+    .required('O plano é obrigatório'),
   start_date: Yup.date().required('A data de início é obrigatória'),
 });
 
@@ -46,7 +51,6 @@ export default function EnrollmentRegister({ match, history }) {
 
         setEnrollment({
           ...data,
-          end_date: parseISO(data.end_date),
           price: data.plan.duration * data.plan.price,
         });
       }
@@ -65,7 +69,7 @@ export default function EnrollmentRegister({ match, history }) {
 
       if (id === 'new') {
         await api.post('/enrollments', data);
-        toast.success('Matrícula cadastrado com sucesso.');
+        toast.success('Matrícula cadastrada com sucesso.');
       } else {
         await api.put(`/enrollments/${id}`, data);
         toast.success('Matrícula atualizada com sucesso.');

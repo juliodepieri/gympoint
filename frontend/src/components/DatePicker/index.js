@@ -1,24 +1,27 @@
 import React, { useRef, useEffect, useState } from 'react';
 import ReactDatePicker from 'react-datepicker';
-import pt from 'date-fns/locale/pt';
-import MaskedInput from 'react-text-mask';
 import PropTypes from 'prop-types';
+import MaskedInput from 'react-text-mask';
+import { utcToZonedTime } from 'date-fns-tz';
+import pt from 'date-fns/locale/pt';
 
 import { useField } from '@rocketseat/unform';
 
 import 'react-datepicker/dist/react-datepicker.css';
+import { parseISO } from 'date-fns';
 import { Container } from './styles';
 
 export default function DatePicker({ name, label, onChange, disabled }) {
   const ref = useRef(null);
   const { fieldName, registerField, defaultValue, error } = useField(name);
   const [selected, setSelected] = useState(defaultValue);
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   useEffect(() => {
     if (defaultValue) {
-      setSelected(new Date(defaultValue));
+      setSelected(utcToZonedTime(defaultValue, timezone));
     }
-  }, [defaultValue]);
+  }, [defaultValue, timezone]);
 
   useEffect(() => {
     registerField({
@@ -39,9 +42,9 @@ export default function DatePicker({ name, label, onChange, disabled }) {
         id={fieldName}
         selected={selected}
         onChange={date => {
-          setSelected(date);
+          setSelected(utcToZonedTime(date));
           if (onChange) {
-            onChange(date);
+            onChange(utcToZonedTime(date));
           }
         }}
         ref={ref}

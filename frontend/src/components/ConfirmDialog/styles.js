@@ -26,7 +26,6 @@ export const Background = styled.div`
 
 export const Content = styled.div`
   background-color: #fefefe;
-  width: 50%;
   min-height: 50px;
   border: 1px solid #888;
 

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Input } from '@rocketseat/unform';
 
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-import NumberInput from '~/components/NumberInput';
-import api from '~/services/api';
+import { Form, Input } from '@rocketseat/unform';
 
+import api from '~/services/api';
+import NumberInput from '~/components/NumberInput';
 import { FormHeader } from '~/pages/_layouts/form/styles';
 import { Content } from './styles';
 
@@ -96,6 +96,7 @@ export default function PlanRegister({ match, history }) {
               label="DURAÇÃO (em meses)"
               name="duration"
               onValueChange={handleDurationChange}
+              decimalScale="0"
             />
           </span>
 

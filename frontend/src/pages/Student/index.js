@@ -38,7 +38,7 @@ export default function Student({ history }) {
 
       const data = rows.map(student => ({
         ...student,
-        age: differenceInYears(new Date(), parseISO(student.dateOfBirth)),
+        age: differenceInYears(new Date(), parseISO(student.date_of_birth)),
       }));
       setStudents(data);
       setTotalPages(Math.ceil(count / pageSize));
@@ -68,7 +68,9 @@ export default function Student({ history }) {
       message: (
         <>
           <p>Tem certeza que deseja excluir o aluno?</p>
-          <p>Atenção, esta ação não pode ser desfeita!</p>
+          <p className="text-warning">
+            Atenção, esta ação não pode ser desfeita!
+          </p>
         </>
       ),
     });

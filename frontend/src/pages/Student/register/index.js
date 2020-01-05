@@ -17,7 +17,7 @@ const schema = Yup.object().shape({
   email: Yup.string()
     .email('Insira um e-mail válido')
     .required('O e-mail é obrigatório'),
-  dateOfBirth: Yup.string().required('A data de nascimento é obrigatória'),
+  date_of_birth: Yup.string().required('A data de nascimento é obrigatória'),
   weight: Yup.number().required('O peso é obrigatório'),
   height: Yup.number().required('A altura é obrigatória'),
 });
@@ -36,19 +36,17 @@ export default function StudentRegister({ match, history }) {
     loadStudent();
   }, [id]);
 
-  async function handleSubmit(data, { resetForm }) {
-    console.tron.log('Cadastrar', data);
+  async function handleSubmit(data) {
     try {
       if (id === 'new') {
         await api.post('/students', data);
-        resetForm();
         toast.success('Aluno cadastrado com sucesso.');
       } else {
         const response = await api.put(`/students/${id}`, data);
         console.tron.log(response);
         toast.success('Aluno atualizado com sucesso.');
-        history.push('/students');
       }
+      history.push('/students');
     } catch (err) {
       console.tron.log(err);
     }
@@ -83,7 +81,7 @@ export default function StudentRegister({ match, history }) {
           label="ENDEREÇO DE E-MAIL"
         />
         <div>
-          <DatePicker name="dateOfBirth" label="DATA DE NASCIMENTO" />
+          <DatePicker name="date_of_birth" label="DATA DE NASCIMENTO" />
 
           <NumberInput name="weight" label="PESO (em kg)" />
 

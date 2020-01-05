@@ -89,9 +89,10 @@ export const Container = styled.div.attrs({
     p {
       line-height: 1.5em;
       text-align: left;
+      color: ${colors.text};
     }
 
-    p:last-child {
+    .text-warning {
       margin-top: 5px;
       color: ${colors.warning};
       font-weight: bold;

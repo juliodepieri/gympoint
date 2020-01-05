@@ -112,4 +112,13 @@ export const FormContent = styled.div`
       height: auto;
     }
   }
+
+  div + span,
+  input + span {
+    display: flex;
+    color: #de3b3b;
+    margin: 0 0 10px;
+    font-weight: bold;
+    margin-top: 5px;
+  }
 `;

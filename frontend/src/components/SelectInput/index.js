@@ -22,7 +22,7 @@ export default function SelectInput({
   }, [defaultValue]);
 
   function parseSelectValue(selectRef) {
-    return selectRef.props.value;
+    return selectRef.props.value || null;
   }
 
   useEffect(() => {
