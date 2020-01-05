@@ -24,13 +24,14 @@ class ChekinController {
   }
 
   async index(req, res) {
-    const { page = 1 } = req.query;
+    const { page = 1, pageSize = 10 } = req.query;
+    const pageLimit = pageSize > 10 ? 10 : pageSize;
 
-    const checkin = await Checkin.findAll({
-      limit: 20,
-      offset: (page - 1) * 20,
-      order: ['created_at'],
-      attributes: ['student_id', 'created_at', 'updated_at'],
+    const checkin = await Checkin.findAndCountAll({
+      limit: pageLimit,
+      offset: (page - 1) * pageLimit,
+      order: [['created_at', 'DESC']],
+      attributes: ['id', 'student_id', 'created_at', 'updated_at'],
     });
 
     return res.json(checkin);

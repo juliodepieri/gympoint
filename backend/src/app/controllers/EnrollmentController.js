@@ -3,9 +3,10 @@ import * as Yup from 'yup';
 import Enrollment from '../models/Enrollment';
 import Plan from '../models/Plan';
 
-import ConfirmationJob from '../jobs/ConfirmationMail';
-import Queue from '../../lib/Queue';
 import Student from '../models/Student';
+import Queue from '../../lib/Queue';
+
+import ConfirmationJob from '../jobs/ConfirmationMail';
 
 class EnrollmentController {
   async store(req, res) {

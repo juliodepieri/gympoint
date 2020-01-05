@@ -22,13 +22,21 @@ class HelpOrderController {
   }
 
   async index(req, res) {
-    const { page = 1, pageSize = 20 } = req.query;
+    const { page = 1, pageSize = 10 } = req.query;
     const pageLimit = pageSize > 20 ? 20 : pageSize;
 
     const query = {
       limit: pageLimit,
       offset: (page - 1) * pageLimit,
-      order: ['created_at'],
+      order: [['created_at', 'DESC']],
+      attributes: [
+        'id',
+        'question',
+        'answer',
+        'answer_at',
+        'created_at',
+        'updated_at',
+      ],
       include: [
         {
           model: Student,
