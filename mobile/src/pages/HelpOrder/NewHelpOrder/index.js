@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { TouchableOpacity, Alert } from 'react-native';
 import { useSelector } from 'react-redux';
 import { withNavigationFocus } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { TouchableOpacity, Alert } from 'react-native';
 
+import PropTypes from 'prop-types';
 import api from '~/services/api';
 import Header from '~/components/Header';
 
@@ -12,16 +13,20 @@ import { Container, Form, FormInput, SubmitButton } from './styles';
 function NewHelpOrder({ navigation }) {
   const student = useSelector(state => state.auth.student);
   const [question, setQuestion] = useState();
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit() {
     try {
-      const response = await api.post(`students/${student.id}/help-orders`, {
+      setLoading(true);
+      await api.post(`students/${student.id}/help-orders`, {
         question,
       });
-      Alert.alert('Sucesso', 'Pedido de ajuda criado com sucesso!');
-      navigation.navigate('ListHelpOrder', { helpOrder: response.data });
+      Alert.alert('Sucesso', 'Pedido de auxílio criado com sucesso!');
+      navigation.navigate('ListHelpOrder', { isFocused: true });
     } catch (err) {
-      Alert.alert('Erro', 'Pedido de ajuda criado com sucesso!');
+      Alert.alert('Erro', 'Pedido de auxílio criado com sucesso!');
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -39,7 +44,9 @@ function NewHelpOrder({ navigation }) {
           numberOfLines={8}
           onChangeText={setQuestion}
         />
-        <SubmitButton onPress={handleSubmit}>Enviar pedido</SubmitButton>
+        <SubmitButton loading={loading} onPress={handleSubmit}>
+          Enviar pedido
+        </SubmitButton>
       </Form>
     </Container>
   );
@@ -56,5 +63,11 @@ NewHelpOrder.navigationOptions = ({ navigation }) => ({
     </TouchableOpacity>
   ),
 });
+
+NewHelpOrder.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func,
+  }).isRequired,
+};
 
 export default withNavigationFocus(NewHelpOrder);

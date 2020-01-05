@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { withNavigationFocus } from 'react-navigation';
 import { Alert } from 'react-native';
 
+import PropTypes from 'prop-types';
 import api from '~/services/api';
 import Header from '~/components/Header';
 import Button from '~/components/Button';
@@ -67,6 +68,8 @@ function Dashboard() {
         'Falha',
         `Não foi possível incluir o check-in: ${err.response.data.error}`
       );
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -95,11 +98,17 @@ function Dashboard() {
   );
 }
 
+const TabBarIcon = ({ tintColor }) => (
+  <Icon name="edit-location" size={20} color={tintColor} />
+);
+
 Dashboard.navigationOptions = {
   tabBarLabel: 'Check-ins',
-  tabBarIcon: ({ tintColor }) => (
-    <Icon name="edit-location" size={20} color={tintColor} />
-  ),
+  tabBarIcon: TabBarIcon,
+};
+
+TabBarIcon.propTypes = {
+  tintColor: PropTypes.string.isRequired,
 };
 
 export default withNavigationFocus(Dashboard);

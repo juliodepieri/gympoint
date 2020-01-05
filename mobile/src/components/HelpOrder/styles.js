@@ -8,7 +8,6 @@ export const Container = styled.SafeAreaView`
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
-  height: 150px;
 `;
 
 export const Header = styled.View`
@@ -19,10 +18,18 @@ export const Header = styled.View`
   justify-content: space-between;
 `;
 
+export const Info = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+  justify-content: space-between;
+`;
+
 export const Status = styled.Text`
   color: ${props => (props.isAnswered ? '#42CB59' : '#999')};
+  margin-left: 5px;
   font-weight: bold;
-  margin-top: 4px;
   font-size: 14px;
 `;
 
@@ -37,4 +44,5 @@ export const Question = styled.Text.attrs({
   color: #666;
   font-size: 14px;
   margin-top: 16px;
+  flex: 1;
 `;

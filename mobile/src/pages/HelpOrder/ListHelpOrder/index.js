@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { TouchableOpacity, Alert } from 'react-native';
 import { useSelector } from 'react-redux';
 import { withNavigationFocus } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { TouchableOpacity, Alert } from 'react-native';
 
+import PropTypes from 'prop-types';
 import api from '~/services/api';
 import Header from '~/components/Header';
 import Button from '~/components/Button';
@@ -37,10 +38,9 @@ function ListHelpOrder({ isFocused, navigation }) {
     }
 
     try {
+      setRefreshing(true);
       setLoading(true);
-      if (isFocused) {
-        loadHelpOrders();
-      }
+      loadHelpOrders();
     } catch (err) {
       Alert.alert('Falha', 'Não foi possível carregar a lista de check-ins');
     } finally {
@@ -54,8 +54,9 @@ function ListHelpOrder({ isFocused, navigation }) {
   }
 
   async function refreshHelpOrders() {
-    setRefreshing(true);
-    setPage(1);
+    if (page !== 1) {
+      setPage(1);
+    }
   }
 
   async function handleNewHelpOrder() {
@@ -70,24 +71,27 @@ function ListHelpOrder({ isFocused, navigation }) {
           Novo pedido de auxílio
         </Button>
 
-        <List
-          data={helpOrders}
-          keyExtractor={item => String(item.id)}
-          onEndReached={loadMore}
-          onEndReachedThreshold={0.1}
-          onRefresh={refreshHelpOrders}
-          refreshing={refreshing}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('ShowHelpOrder', { helpOrder: item })
-              }
-            >
-              <HelpOrder data={item} />
-            </TouchableOpacity>
-          )}
-        />
-        {loading && <Loading />}
+        {loading ? (
+          <Loading />
+        ) : (
+          <List
+            data={helpOrders}
+            keyExtractor={item => String(item.id)}
+            onEndReached={loadMore}
+            onEndReachedThreshold={0.1}
+            onRefresh={refreshHelpOrders}
+            refreshing={refreshing}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('ShowHelpOrder', { helpOrder: item })
+                }
+              >
+                <HelpOrder data={item} />
+              </TouchableOpacity>
+            )}
+          />
+        )}
       </Content>
     </Container>
   );
@@ -104,5 +108,12 @@ ListHelpOrder.navigationOptions = ({ navigation }) => ({
     </TouchableOpacity>
   ),
 });
+
+ListHelpOrder.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func,
+  }).isRequired,
+  isFocused: PropTypes.bool.isRequired,
+};
 
 export default withNavigationFocus(ListHelpOrder);
