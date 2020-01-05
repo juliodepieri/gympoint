@@ -64,7 +64,7 @@ $> yarn start
 
 ### Mobile
 
-O projeto mobile foi feito e testado no ANDROID utilizando Genymotion.
+O projeto mobile foi feito e testado no **ANDROID** utilizando **Genymotion**.
 
 Instalar as dependências do projeto
 
