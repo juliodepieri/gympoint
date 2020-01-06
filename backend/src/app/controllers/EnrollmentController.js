@@ -142,6 +142,7 @@ class EnrollmentController {
     await enrollment.update({
       student_id,
       plan_id,
+      start_date,
       end_date,
       price,
     });
