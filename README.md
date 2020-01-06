@@ -21,7 +21,7 @@
 
 ## Sobre o projeto
 
-A aplicação desenvolvida é um gerenciador de academia chamado Gympoint, composto de três projetos: back-end, front-end e mobile.
+A aplicação desenvolvida é um gerenciador de academia chamado Gympoint, composto de três projetos: back-end(NodeJS), front-end(ReactJS) e mobile(React-Native).
 
 
 ### Instalação
