@@ -10,7 +10,7 @@ import Header from '~/components/Header';
 import Button from '~/components/Button';
 import HelpOrder from '~/components/HelpOrder';
 
-import { Container, Content, List, Loading } from './styles';
+import { Container, Content, List } from './styles';
 
 function ListHelpOrder({ isFocused, navigation }) {
   const student = useSelector(state => state.auth.student);
@@ -18,6 +18,10 @@ function ListHelpOrder({ isFocused, navigation }) {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [helpOrders, setHelpOrders] = useState([]);
+
+  useEffect(() => {
+    console.tron.log('focused', isFocused);
+  });
 
   useEffect(() => {
     async function loadHelpOrders() {

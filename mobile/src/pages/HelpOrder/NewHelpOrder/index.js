@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { TouchableOpacity, Alert } from 'react-native';
 import { useSelector } from 'react-redux';
-import { withNavigationFocus } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import PropTypes from 'prop-types';
@@ -10,7 +9,7 @@ import Header from '~/components/Header';
 
 import { Container, Form, FormInput, SubmitButton } from './styles';
 
-function NewHelpOrder({ navigation }) {
+export default function NewHelpOrder({ navigation }) {
   const student = useSelector(state => state.auth.student);
   const [question, setQuestion] = useState();
   const [loading, setLoading] = useState(false);
@@ -21,8 +20,8 @@ function NewHelpOrder({ navigation }) {
       await api.post(`students/${student.id}/help-orders`, {
         question,
       });
+      navigation.navigate('ListHelpOrder');
       Alert.alert('Sucesso', 'Pedido de auxílio criado com sucesso!');
-      navigation.navigate('ListHelpOrder', { isFocused: true });
     } catch (err) {
       Alert.alert('Erro', 'Pedido de auxílio criado com sucesso!');
     } finally {
@@ -69,5 +68,3 @@ NewHelpOrder.propTypes = {
     navigate: PropTypes.func,
   }).isRequired,
 };
-
-export default withNavigationFocus(NewHelpOrder);

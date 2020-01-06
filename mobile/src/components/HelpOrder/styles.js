@@ -44,5 +44,4 @@ export const Question = styled.Text.attrs({
   color: #666;
   font-size: 14px;
   margin-top: 16px;
-  flex: 1;
 `;

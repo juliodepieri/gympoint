@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { withNavigationFocus } from 'react-navigation';
 import { Alert } from 'react-native';
 
 import PropTypes from 'prop-types';
@@ -11,9 +10,9 @@ import Button from '~/components/Button';
 
 import Checkin from '~/components/Checkin';
 
-import { Container, Content, List, Loading } from './styles';
+import { Container, Content, List } from './styles';
 
-function Dashboard() {
+export default function Dashboard() {
   const student = useSelector(state => state.auth.student);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -109,5 +108,3 @@ Dashboard.navigationOptions = {
 TabBarIcon.propTypes = {
   tintColor: PropTypes.string.isRequired,
 };
-
-export default withNavigationFocus(Dashboard);
